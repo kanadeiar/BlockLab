@@ -1,8 +1,9 @@
-﻿<header class="sticky-top">
-    <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-light bg-info border-bottom mb-4">
-        <div class="container-md">
-            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                <img src="~/favicon.png" alt="Бренд" width="30" height="30" class="d-inline-block align-text-top">
+﻿@inherits LayoutComponentBase
+<header class="sticky-top">
+    <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-dark bg-success border-bottom mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="favicon.png" alt="Бренд" width="30" height="30" class="d-inline-block align-text-top">
                 Лаборатория
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -11,14 +12,12 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <partial name="Partial/_MainMenuPartial" />
+                <_MainMenuPartial/>
 
                 <div class="d-flex">
-                    <a class="btn btn-success me-1" href="/online">Управление результатами</a>
+                    <a class="btn btn-info me-1" href="/">Назад</a>
                 </div>
             </div>
         </div>
     </nav>
 </header>
-
-
