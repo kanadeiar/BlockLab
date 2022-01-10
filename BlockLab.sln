@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockLab", "BlockLab\BlockLab.csproj", "{A944F81A-6F19-4919-9BE1-0A03210B1676}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A944F81A-6F19-4919-9BE1-0A03210B1676}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A944F81A-6F19-4919-9BE1-0A03210B1676}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A944F81A-6F19-4919-9BE1-0A03210B1676}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A944F81A-6F19-4919-9BE1-0A03210B1676}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E65D37A-71BE-42C8-A1E6-AFFB63AA305D}
+	EndGlobalSection
+EndGlobal
