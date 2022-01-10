@@ -4,23 +4,24 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-3 mb-2">
             <partial name="Partial/_LeftSidebarPartial" />
         </div>
-        <div class="col-sm-9">
-            <h1>@ViewBag.Title</h1>
+        <div class="col-sm-9 mb-2">
+            <div class="border-1 bg-light shadow rounded-1 p-2">
+                <h1>@ViewBag.Title</h1>
 
-            <h1 class="p-4 bg-info text-dark text-center rounded">Лабораторное приложение</h1>
+                <h1 class="p-4 bg-info text-dark text-center rounded">Лабораторное приложение</h1>
 
-            <p>Прототип приложения для лаборатории, которая работает с лабораторными данными по строительным газобетонным блокам.</p>
+                <p>Прототип приложения для лаборатории, которая работает с лабораторными данными по строительным газобетонным блокам.</p>
 
-            <a class="btn btn-outline-success" target="_blank" href="https://github.com/kanadeiar/BlockLab">
-                <i class="fab fa-git"></i>
-                Мой github
-            </a>
+                <a class="btn btn-outline-success" target="_blank" href="https://github.com/kanadeiar/BlockLab">
+                    <i class="fab fa-git"></i>
+                    Мой github
+                </a>
 
-            <component type="typeof(CounterPartial)" render-mode="ServerPrerendered" />
+                @*<component type="typeof(CounterPartial)" render-mode="ServerPrerendered"/>*@
+            </div>
         </div>
     </div>
-
 </div>
