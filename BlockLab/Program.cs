@@ -1,10 +1,11 @@
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.ConfigureServices(services =>
 {
     services.AddDbContext<BlockLabContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("BlockLabConnection")));
+
+    services.AddScoped<IResearchesInfoService, ResearchesInfoService>();
 
     services.AddControllersWithViews().AddRazorRuntimeCompilation();
     services.AddRazorPages().AddRazorRuntimeCompilation();

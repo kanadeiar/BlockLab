@@ -9,3 +9,6 @@ global using System.ComponentModel.DataAnnotations;
 global using Microsoft.EntityFrameworkCore;
 global using BlockLab.Dal.Data;
 global using BlockLab.Dal.TestData;
+global using BlockLab.Services;
+global using BlockLab.Domain.Entites;
+global using BlockLab.WebModels;

@@ -123,7 +123,7 @@ public static class BlockLabSeedTestData
                 DateTime = DateTime.Today.AddHours(rnd.Next(12)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат внешнего осмотра № {rnd.Next(100)}",
                 Text = "Линзы, Сколы от подрезного слоя, Следы от решеток.",
-                IsNormal = true,
+                IsNormal = false,
                 TypeResearch = tr2,
                 ResearchObject = ro5,
                 LabAssistant = assistants[rnd.Next(assistants.Count) + 1],

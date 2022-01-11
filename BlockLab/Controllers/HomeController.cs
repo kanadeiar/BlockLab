@@ -2,9 +2,16 @@
 
 public class HomeController : Controller
 {
+    private readonly IResearchesInfoService _researchesInfoService;
+    public HomeController(IResearchesInfoService researchesInfoService)
+    {
+        _researchesInfoService = researchesInfoService;
+    }
+
     public IActionResult Index()
     {
-        return View();
+        var models = _researchesInfoService.GetTop10Researches();
+        return View(models);
     }
 
     public IActionResult About()
@@ -20,5 +27,7 @@ public class HomeController : Controller
             case "404": return View("Error404");
         }
     }
+
+
 }
 
