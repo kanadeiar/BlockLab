@@ -1,7 +1,7 @@
 ﻿namespace BlockLab.Domain.Models
 {
     /// <summary> Состояние сортировки </summary>
-    public enum ResultSortState
+    public enum ResearchSortState
     {
         DateAsc,
         DateDesc,
