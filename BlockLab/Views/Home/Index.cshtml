@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ResearchWebModel>
+﻿@using System.Globalization
+@model IEnumerable<ResearchWebModel>
 @{
     ViewBag.Title = "Главная";
 }
@@ -28,7 +29,7 @@
                         @foreach (var m in Model)
                         {
                             <li class="list-group-item @(m.IsNormal?"":"bg-danger bg-opacity-25")">
-                                <span>@(i++) Дата и время: <strong>@m.DateTime.ToString("dd MMMM yyyy") @m.DateTime.ToString("t")</strong></span>
+                                <span>@(i++) Дата и время: <strong>@m.DateTime.ToString("dd.MM.yyyy г.", new CultureInfo("ru-RU")) @m.DateTime.ToString("HH:mm")</strong></span>
                                 <span><strong>@m.Name</strong></span>
                                 <span>Вид: <strong>@m.TypeResearchName</strong></span>
                                 <span>Результат: <strong>@((m.Value != 0.0) ? m.Value.ToString("F1") : "") @m.Text</strong></span>
@@ -43,7 +44,9 @@
                                 }
                                 <span>@m.Note</span>
                                 <span>Лаборант: <strong>@m.LabAssistantSurFP</strong></span>
-                                <a href="#" class="btn btn-sm btn-info">Инфо</a>
+                                <a asp-action="Info" asp-controller="Research" asp-route-id="@m.Id" class="btn btn-sm btn-info">
+                                    Инфо
+                                </a>
                             </li>
                         }
                     }

@@ -16,7 +16,7 @@ public class ResearchInfoPagiService : IResearchInfoPagiService
             .Include(r => r.LabAssistant)
             .Include(r => r.WorkShift)
             .Where(r => !r.IsDelete);
-        if (filter?.Name is { } name) 
+        if (filter?.Name is { } name)
             query = query.Where(q => q.Name.Contains(name));
         if (filter?.TypeId is { } typeResearchId)
             query = query.Where(q => q.TypeResearchId == typeResearchId);
@@ -48,24 +48,25 @@ public class ResearchInfoPagiService : IResearchInfoPagiService
                 .Take(pageSize);
         }
         var models = await query.Select(r => new ResearchWebModel
-            {
-                Id = r.Id,
-                DateTime = r.DateTime,
-                Name = r.Name,
-                Value = r.Value,
-                Text = r.Text,
-                IsNormal = r.IsNormal,
-                Note = r.Note,
-                TypeResearchName = r.TypeResearch.Name,
-                ResearchObjectName = r.ResearchObject.Name,
-                LabAssistantSurFP = $"{r.LabAssistant.SurName} {r.LabAssistant.FirstName[0]}.{r.LabAssistant.Patronymmic[0]}.",
-                WorkShiftName = r.WorkShift.Name,
-            }).ToArrayAsync();
+        {
+            Id = r.Id,
+            DateTime = r.DateTime,
+            Name = r.Name,
+            Value = r.Value,
+            Text = r.Text,
+            IsNormal = r.IsNormal,
+            Note = r.Note,
+            TypeResearchName = r.TypeResearch.Name,
+            ResearchObjectName = r.ResearchObject.Name,
+            LabAssistantSurFP = $"{r.LabAssistant.SurName} {r.LabAssistant.FirstName[0]}.{r.LabAssistant.Patronymmic[0]}.",
+            WorkShiftName = r.WorkShift.Name,
+        }).ToArrayAsync();
         return new ResearchPagiWebModel
         {
             Researches = models,
             Count = count,
         };
     }
+
 }
 

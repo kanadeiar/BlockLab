@@ -12,15 +12,8 @@ public class ResearchWebModel
     public string TypeResearchName { get; set; }
     public string ResearchObjectName { get; set; }
     public string LabAssistantSurFP { get; set; }
+    public string AssistantSurName { get; set; }
+    public string AssistantFirstName { get; set; }
+    public string AssistantPatronymic { get; set; }
     public string WorkShiftName { get; set; }
 }
-public class BlockQualityResearchWebModel : ResearchWebModel
-{
-    public string Format { get; set; }
-    public string Trademark { get; set; }
-}
-public class CementResearchWebModel : ResearchWebModel
-{
-    public string FromName { get; set; }
-}
-

@@ -3,9 +3,11 @@
 public class ResearchController : Controller
 {
     private readonly IResearchInfoPagiService _researchInfoPagiService;
-    public ResearchController(IResearchInfoPagiService researchInfoPagiService)
+    private readonly IResearchInfoService _researchInfoService;
+    public ResearchController(IResearchInfoPagiService researchInfoPagiService, IResearchInfoService researchInfoService)
     {
         _researchInfoPagiService = researchInfoPagiService;
+        _researchInfoService = researchInfoService;
     }
 
     public async Task<IActionResult> Index(string? name, int? typeId, bool? isNormal, int? objId, ResearchSortState order = ResearchSortState.DateAsc, int page = 1, int pageSize = 10)
@@ -28,6 +30,12 @@ public class ResearchController : Controller
             Pagi = new PagiWebModel(page, count, pageSize),
             Researches = researches,
         };
+        return View(model);
+    }
+
+    public async Task<IActionResult> Info(int id)
+    {
+        var model = await _researchInfoService.GetResearch(id);
         return View(model);
     }
 }

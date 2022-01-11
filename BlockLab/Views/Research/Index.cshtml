@@ -79,14 +79,16 @@
                             {
                                 <tr class="@(m.IsNormal ? "" : "bg-danger bg-opacity-25")">
                                     <td>@(i++)</td>
-                                    <td>@m.DateTime.ToString("dd MMMM yyyy") @m.DateTime.ToString("t")</td>
+                                    <td>@m.DateTime.ToString("dd.MM.yyyy г.", new CultureInfo("ru-RU")) @m.DateTime.ToString("HH:mm")</td>
                                     <td>@m.Name</td>
                                     <td>@m.TypeResearchName</td>
                                     <td>@((m.Value != 0.0) ? m.Value.ToString("F1") : "") @m.Text</td>
                                     <td>@((m.IsNormal) ? "Да" : "Нет")</td>
                                     <td>@m.LabAssistantSurFP</td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-info">Инфо</a>
+                                        <a asp-action="Info" asp-controller="Research" asp-route-id="@m.Id" class="btn btn-sm btn-info">
+                                            Инфо
+                                        </a>
                                     </td>
                                 </tr>
                             }
