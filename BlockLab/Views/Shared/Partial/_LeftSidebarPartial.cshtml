@@ -11,7 +11,7 @@
                 <h2 class="accordion-header" id="showMainResults">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#mainResults" aria-expanded="false" aria-controls="mainResults">
-                        Категории результатов
+                        Виды исследований
                     </button>
                 </h2>
                 <div id="mainResults" class="accordion-collapse collapse" aria-labelledby="showMainResults"
@@ -19,13 +19,33 @@
                     <div class="accordion-body">
                         <ul class="list-unstyled">
                             <li>
-                                <a asp-controller="Home" asp-action="Index" class="nav-link text-dark fw-light px-0">
-                                    Первая категория результатов
+                                <a asp-controller="Research" asp-action="Index" asp-route-typeId="1" class="nav-link text-dark fw-light px-0">
+                                    Исследование растекаемости
                                 </a>
                             </li>
                             <li>
-                                <a asp-controller="Home" asp-action="Index" class="nav-link text-dark fw-light px-0">
-                                    Вторая категория результатов
+                                <a asp-controller="Research" asp-action="Index" asp-route-typeId="2" class="nav-link text-dark fw-light px-0">
+                                    Визуальный осмотр
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Research" asp-action="Index" asp-route-typeId="3" class="nav-link text-dark fw-light px-0">
+                                    Исследование качества блоков
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Research" asp-action="Index" asp-route-typeId="4" class="nav-link text-dark fw-light px-0">
+                                    Исследование цемента
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Research" asp-action="Index" asp-route-typeId="5" class="nav-link text-dark fw-light px-0">
+                                    Исследование молото-вяжущего
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Research" asp-action="Index" asp-route-typeId="6" class="nav-link text-dark fw-light px-0">
+                                    Исследование шлама
                                 </a>
                             </li>
                         </ul>
@@ -36,7 +56,7 @@
                 <h2 class="accordion-header" id="showMainNormals">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#normalsShow" aria-expanded="false" aria-controls="normalsShow">
-                        Успешность результатов
+                        Нормальность результата
                     </button>
                 </h2>
                 <div id="normalsShow" class="accordion-collapse collapse" aria-labelledby="showMainNormals"
@@ -44,12 +64,12 @@
                     <div class="accordion-body">
                         <ul class="list-unstyled">
                             <li>
-                                <a asp-controller="Home" asp-action="Index" class="nav-link text-dark fw-light px-0">
+                                <a asp-controller="Research" asp-action="Index" asp-route-isnormal="true" class="nav-link text-dark fw-light px-0">
                                     Нормальный результат
                                 </a>
                             </li>
                             <li>
-                                <a asp-controller="Home" asp-action="Index" class="nav-link text-dark fw-light px-0">
+                                <a asp-controller="Research" asp-action="Index" asp-route-isnormal="false" class="nav-link text-dark fw-light px-0">
                                     Плохой результат
                                 </a>
                             </li>
@@ -61,7 +81,7 @@
                 <h2 class="accordion-header" id="showObjects">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#objectsShow" aria-expanded="false" aria-controls="objectsShow">
-                        Объекты исследований
+                        Объект исследования
                     </button>
                 </h2>
                 <div id="objectsShow" class="accordion-collapse collapse" aria-labelledby="showObjects"
@@ -69,13 +89,43 @@
                     <div class="accordion-body">
                         <ul class="list-unstyled">
                             <li>
-                                <a asp-controller="Home" asp-action="Index" class="nav-link text-dark fw-light px-0">
-                                    Первый объект
+                                <a asp-controller="Research" asp-action="Index" asp-route-objId="1" class="nav-link text-dark fw-light px-0">
+                                    Сырой газобетонный массив
                                 </a>
                             </li>
                             <li>
-                                <a asp-controller="Home" asp-action="Index" class="nav-link text-dark fw-light px-0">
-                                    Второй объект
+                                <a asp-controller="Research" asp-action="Index" asp-route-objId="2" class="nav-link text-dark fw-light px-0">
+                                    Созревший газобетонный массив
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Research" asp-action="Index" asp-route-objId="3" class="nav-link text-dark fw-light px-0">
+                                    Разрезанный газобетонный массив
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Research" asp-action="Index" asp-route-objId="4" class="nav-link text-dark fw-light px-0">
+                                    Твердый газобетонный массив после автоклавов
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Research" asp-action="Index" asp-route-objId="5" class="nav-link text-dark fw-light px-0">
+                                    Газобетонный блок после сортировки
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Research" asp-action="Index" asp-route-objId="6" class="nav-link text-dark fw-light px-0">
+                                    Цемент
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Research" asp-action="Index" asp-route-objId="7" class="nav-link text-dark fw-light px-0">
+                                    Молото-вяжущее
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="Research" asp-action="Index" asp-route-objId="8" class="nav-link text-dark fw-light px-0">
+                                    Шлам
                                 </a>
                             </li>
                         </ul>

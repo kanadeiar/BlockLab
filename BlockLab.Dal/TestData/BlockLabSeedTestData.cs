@@ -202,7 +202,7 @@ public static class BlockLabSeedTestData
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Удовлетворительно.",
                 IsNormal = true,
-                TypeResearch = tr5,
+                TypeResearch = tr6,
                 ResearchObject = ro8,
                 LabAssistant = assistants[rnd.Next(assistants.Count) + 1],
                 WorkShift = workshifts[rnd.Next(workshifts.Count) + 1],
