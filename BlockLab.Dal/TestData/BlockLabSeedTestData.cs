@@ -95,7 +95,7 @@ public static class BlockLabSeedTestData
             var workshifts = await context.WorkShifts.ToDictionaryAsync(i => i.Id, i => i);
             context.Researches.AddRange(Enumerable.Range(1, 20).Select(i => new Research
             {
-                DateTime = DateTime.Today.AddHours(rnd.Next(12)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат исследования № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Результат удовлетворителен",
@@ -107,7 +107,7 @@ public static class BlockLabSeedTestData
             }));
             context.Researches.AddRange(Enumerable.Range(1, 10).Select(i => new Research
             {
-                DateTime = DateTime.Today.AddHours(rnd.Next(12)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат исследования № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Результат плохой",
@@ -120,10 +120,10 @@ public static class BlockLabSeedTestData
             }));
             context.Researches.AddRange(Enumerable.Range(1, 5).Select(i => new Research
             {
-                DateTime = DateTime.Today.AddHours(rnd.Next(12)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат внешнего осмотра № {rnd.Next(100)}",
                 Text = "Линзы, Сколы от подрезного слоя, Следы от решеток.",
-                IsNormal = false,
+                IsNormal = true,
                 TypeResearch = tr2,
                 ResearchObject = ro5,
                 LabAssistant = assistants[rnd.Next(assistants.Count) + 1],
@@ -132,7 +132,7 @@ public static class BlockLabSeedTestData
             await context.SaveChangesAsync();
             context.BlockQualityResearches.AddRange(Enumerable.Range(1, 10).Select(i => new BlockQualityResearch
             {
-                DateTime = DateTime.Today.AddHours(rnd.Next(12)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат по качеству блоков № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Удовлетворительно.",
@@ -159,7 +159,7 @@ public static class BlockLabSeedTestData
             await context.SaveChangesAsync();
             context.CementResearches.AddRange(Enumerable.Range(1, 10).Select(i => new CementResearch
             {
-                DateTime = DateTime.Today.AddHours(rnd.Next(12)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат по цементу № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Удовлетворительно.",
@@ -180,7 +180,7 @@ public static class BlockLabSeedTestData
             await context.SaveChangesAsync();
             context.HammerBinderResearches.AddRange(Enumerable.Range(1, 10).Select(i => new HammerBinderResearch
             {
-                DateTime = DateTime.Today.AddHours(rnd.Next(12)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат по молото-вяжущему № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Удовлетворительно.",
@@ -197,7 +197,7 @@ public static class BlockLabSeedTestData
             await context.SaveChangesAsync();
             context.MudResearches.AddRange(Enumerable.Range(1, 10).Select(i => new MudResearch
             {
-                DateTime = DateTime.Today.AddHours(rnd.Next(12)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат по шламу № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Удовлетворительно.",

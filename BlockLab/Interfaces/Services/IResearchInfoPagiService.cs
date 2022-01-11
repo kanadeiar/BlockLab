@@ -1,10 +1,8 @@
-﻿using BlockLab.Domain.Models;
+﻿namespace BlockLab.Interfaces.Services;
 
-namespace BlockLab.Interfaces.Services
+public interface IResearchInfoPagiService
 {
-    public interface IResearchInfoPagiService
-    {
-        /// <summary> Получение пагинованных отфильтрованных результатов исследований </summary>
-        Task<ResearchPagiWebModel> GetPagiFilterSortResearches(ResearchFilter filter);
-    }
+    /// <summary> Получение пагинованных отфильтрованных результатов исследований </summary>
+    Task<ResearchPagiWebModel> GetPagiFilterSortResearches(ResearchFilter filter);
 }
+

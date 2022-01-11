@@ -1,6 +1,4 @@
-﻿
-
-namespace BlockLab.Services;
+﻿namespace BlockLab.Services;
 
 public interface IResearchInfoService
 {

@@ -6,7 +6,7 @@ public class PaginationTagHelper : TagHelper
     private readonly IUrlHelperFactory _urlHelperFactory;
 
     public PagiWebModel PageModel { get; set; }
-    public string PageAction { get; set; }
+    public string Action { get; set; }
     [ViewContext, HtmlAttributeNotBound]
     public ViewContext ViewContext { get; set; }
     [HtmlAttributeName(DictionaryAttributePrefix = "page-url-")]
@@ -93,7 +93,7 @@ public class PaginationTagHelper : TagHelper
         else
         {
             PageUrlValues["page"] = pageNumber;
-            link.Attributes["href"] = urlHelper.Action(PageAction, PageUrlValues);
+            link.Attributes["href"] = urlHelper.Action(Action, PageUrlValues);
         }
 
         foreach (var (key, value) in PageUrlValues.Where(v => v.Value is not null))
@@ -114,7 +114,7 @@ public class PaginationTagHelper : TagHelper
         var item = new TagBuilder("li");
         var link = new TagBuilder("a");
         PageUrlValues["page"] = pageNumber;
-        link.Attributes["href"] = urlHelper.Action(PageAction, PageUrlValues);
+        link.Attributes["href"] = urlHelper.Action(Action, PageUrlValues);
 
         foreach (var (key, value) in PageUrlValues.Where(v => v.Value is not null))
             link.MergeAttribute($"data-{key}", value.ToString());
@@ -135,7 +135,7 @@ public class PaginationTagHelper : TagHelper
         var item = new TagBuilder("li");
         var link = new TagBuilder("a");
         PageUrlValues["page"] = pageNumber;
-        link.Attributes["href"] = urlHelper.Action(PageAction, PageUrlValues);
+        link.Attributes["href"] = urlHelper.Action(Action, PageUrlValues);
 
         foreach (var (key, value) in PageUrlValues.Where(v => v.Value is not null))
             link.MergeAttribute($"data-{key}", value.ToString());

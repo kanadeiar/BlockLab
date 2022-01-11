@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using BlockLab.Domain.Models;
-
-namespace BlockLab.Services;
+﻿namespace BlockLab.Services;
 
 public class ResearchInfoPagiService : IResearchInfoPagiService
 {

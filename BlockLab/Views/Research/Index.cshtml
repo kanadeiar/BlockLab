@@ -1,6 +1,6 @@
 ﻿@model ResearchFilterSortPagiWebModel
 @{
-    ViewBag.Title = "Все результаты";
+    ViewBag.Title = "Результаты исследований";
 }
 
 <div class="container">
@@ -12,28 +12,64 @@
             <div class="border-1 bg-light shadow rounded-1 p-2">
                 <h1>@ViewBag.Title</h1>
 
-                <p>Все результаты исследований по лаборатории:</p>
-
+                <p>Результаты лабораторных исследований по лаборатории:</p>
+                
+                <form method="get">
+                    <label>Фильтр по названию:</label>
+                    <div class="input-group mb-1">
+                        <input name="name" class="form-control" value="@Model.Filter.Name" placeholder="Введите часть названия"/>
+                        <input type="submit" value="Фильтр" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Отфильтровать результаты лабораторных анализов по части названия"/>
+                    </div>
+                </form>
                 @if (Model.Researches.FirstOrDefault() is { } first)
                 {
-                    <form method="get">
-                        <label>Фильтр по названию:</label>
-                        <div class="input-group mb-1">
-                            <input name="name" class="form-control" value="@Model.Filter.Name" placeholder="Введите часть названия"/>
-                            <input type="submit" value="Фильтр" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Отфильтровать результаты лабораторных анализов по части названия"/>
-                        </div>
-                    </form>
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered table-striped">
                             <thead>
                             <tr>
                                 <th><label>№</label></th>
-                                <th>Дата и время</th>
-                                <th>Название</th>
-                                <th>Вид</th>
-                                <th>Результат</th>
-                                <th>Норма</th>
-                                <th>Лаборант</th>
+                                <th>
+                                    <sorting action="Index" current="@Model.Sort.Current" up="@Model.Sort.Up" property="@Model.Sort.Date"
+                                             page-url-name="@Model.Filter.Name" page-url-typeid="@Model.Filter.TypeId" 
+                                             page-url-isnormal="@Model.Filter.IsNormal" page-url-objid="@Model.Filter.ObjId">
+                                        Дата
+                                    </sorting>
+                                </th>
+                                <th>
+                                    <sorting action="Index" current="@Model.Sort.Current" up="@Model.Sort.Up" property="@Model.Sort.Name"
+                                             page-url-name="@Model.Filter.Name" page-url-typeid="@Model.Filter.TypeId" 
+                                             page-url-isnormal="@Model.Filter.IsNormal" page-url-objid="@Model.Filter.ObjId">
+                                        Название
+                                    </sorting>
+                                </th>
+                                <th>
+                                    <sorting action="Index" current="@Model.Sort.Current" up="@Model.Sort.Up" property="@Model.Sort.Type"
+                                             page-url-name="@Model.Filter.Name" page-url-typeid="@Model.Filter.TypeId" 
+                                             page-url-isnormal="@Model.Filter.IsNormal" page-url-objid="@Model.Filter.ObjId">
+                                        Вид
+                                    </sorting>
+                                </th>
+                                <th>
+                                    <sorting action="Index" current="@Model.Sort.Current" up="@Model.Sort.Up" property="@Model.Sort.Value"
+                                             page-url-name="@Model.Filter.Name" page-url-typeid="@Model.Filter.TypeId" 
+                                             page-url-isnormal="@Model.Filter.IsNormal" page-url-objid="@Model.Filter.ObjId">
+                                        Результат
+                                    </sorting>
+                                </th>
+                                <th>
+                                    <sorting action="Index" current="@Model.Sort.Current" up="@Model.Sort.Up" property="@Model.Sort.Normal"
+                                             page-url-name="@Model.Filter.Name" page-url-typeid="@Model.Filter.TypeId" 
+                                             page-url-isnormal="@Model.Filter.IsNormal" page-url-objid="@Model.Filter.ObjId">
+                                        Норма
+                                    </sorting>
+                                </th>
+                                <th>
+                                    <sorting action="Index" current="@Model.Sort.Current" up="@Model.Sort.Up" property="@Model.Sort.Assistant"
+                                             page-url-name="@Model.Filter.Name" page-url-typeid="@Model.Filter.TypeId" 
+                                             page-url-isnormal="@Model.Filter.IsNormal" page-url-objid="@Model.Filter.ObjId">
+                                        Лаборант
+                                    </sorting>
+                                </th>
                                 <th></th>
                             </tr>
                             </thead>
@@ -56,13 +92,9 @@
                             }
                             </tbody>
                         </table>
-                        <pagination page-model="@Model.Pagi"
-                                    page-action="Index"
-                                    page-url-name="@Model.Filter.Name"
-                                    page-url-typeid="@Model.Filter.TypeId"
-                                    page-url-isnormal="@Model.Filter.IsNormal"
-                                    page-url-objid="@Model.Filter.ObjId"
-                                    page-url-order="@Model.Sort.Previous"></pagination>
+                        <pagination page-model="@Model.Pagi" action="Index" page-url-name="@Model.Filter.Name" 
+                                    page-url-typeid="@Model.Filter.TypeId" page-url-isnormal="@Model.Filter.IsNormal" 
+                                    page-url-objid="@Model.Filter.ObjId" page-url-order="@Model.Sort.Previous"></pagination>
                     </div>
 
                 }
