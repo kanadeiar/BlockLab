@@ -1,24 +1,21 @@
-﻿using BlockLab.WebModels;
+﻿namespace BlockLab.Services;
 
-namespace BlockLab.Services;
-
-public class ResearchesInfoService : IResearchesInfoService
+public class ResearchInfoService : IResearchInfoService
 {
     private readonly BlockLabContext _context;
-
-    public ResearchesInfoService(BlockLabContext context)
+    public ResearchInfoService(BlockLabContext context)
     {
         _context = context;
     }
 
-    public IEnumerable<ResearchWebModel> GetTop10Researches()
+    public async Task<IEnumerable<ResearchWebModel>> GetTop10Researches()
     {
         var models = new List<ResearchWebModel>();
-        foreach (var r in _context.Researches.OrderByDescending(r => r.DateTime).Take(10)
+        foreach (var r in await _context.Researches.OrderByDescending(r => r.DateTime).Take(10)
                      .Include(r => r.TypeResearch)
                      .Include(r => r.ResearchObject)
                      .Include(r => r.LabAssistant)
-                     .Include(r => r.WorkShift))
+                     .Include(r => r.WorkShift).ToArrayAsync())
         {
             ResearchWebModel? model = null;
             if (r is BlockQualityResearch e)
@@ -50,10 +47,7 @@ public class ResearchesInfoService : IResearchesInfoService
             model.WorkShiftName = r.WorkShift.Name;
             models.Add(model);
         }
-
         return models;
     }
-
-
 }
 

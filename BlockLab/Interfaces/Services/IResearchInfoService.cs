@@ -2,9 +2,9 @@
 
 namespace BlockLab.Services;
 
-public interface IResearchesInfoService
+public interface IResearchInfoService
 {
     /// <summary> Получение последних 10 исследований </summary>
     /// <returns>Исследования</returns>
-    IEnumerable<ResearchWebModel> GetTop10Researches();
+    Task<IEnumerable<ResearchWebModel>> GetTop10Researches();
 }

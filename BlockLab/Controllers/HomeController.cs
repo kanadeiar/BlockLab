@@ -2,15 +2,15 @@
 
 public class HomeController : Controller
 {
-    private readonly IResearchesInfoService _researchesInfoService;
-    public HomeController(IResearchesInfoService researchesInfoService)
+    private readonly IResearchInfoService _researchInfoService;
+    public HomeController(IResearchInfoService researchInfoService)
     {
-        _researchesInfoService = researchesInfoService;
+        _researchInfoService = researchInfoService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var models = _researchesInfoService.GetTop10Researches();
+        var models = await _researchInfoService.GetTop10Researches();
         return View(models);
     }
 

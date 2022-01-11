@@ -12,3 +12,4 @@ global using BlockLab.Dal.TestData;
 global using BlockLab.Services;
 global using BlockLab.Domain.Entites;
 global using BlockLab.WebModels;
+global using BlockLab.Interfaces.Services;

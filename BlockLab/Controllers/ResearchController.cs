@@ -2,9 +2,16 @@
 
 public class ResearchController : Controller
 {
-    public IActionResult Index()
+    private readonly IResearchInfoPagiService _researchInfoPagiService;
+    public ResearchController(IResearchInfoPagiService researchInfoPagiService)
     {
-        return View();
+        _researchInfoPagiService = researchInfoPagiService;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var models = await _researchInfoPagiService.GetPagiFilterResearches();
+        return View(models);
     }
 }
 

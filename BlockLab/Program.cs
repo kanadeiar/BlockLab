@@ -5,7 +5,8 @@ builder.Host.ConfigureServices(services =>
 {
     services.AddDbContext<BlockLabContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("BlockLabConnection")));
 
-    services.AddScoped<IResearchesInfoService, ResearchesInfoService>();
+    services.AddScoped<IResearchInfoService, ResearchInfoService>();
+    services.AddScoped<IResearchInfoPagiService, ResearchInfoPagiService>();
 
     services.AddControllersWithViews().AddRazorRuntimeCompilation();
     services.AddRazorPages().AddRazorRuntimeCompilation();
