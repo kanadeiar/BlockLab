@@ -33,6 +33,6 @@ namespace BlockLab.Domain.Entites
         /// <summary> Откуда </summary>
         [Required(ErrorMessage = "Значение откуда привезен цементи обязательно")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Значение откуда привезен цемент должно быть длинной от 2 до 100 символов")]
-        public string? FromName { get; set; }
+        public string FromName { get; set; }
     }
 }

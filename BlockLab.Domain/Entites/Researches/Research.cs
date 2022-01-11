@@ -23,26 +23,23 @@ namespace BlockLab.Domain.Entites
         public bool IsNormal { get; set; }
         /// <summary> Примечание </summary>
         [MaxLength(300, ErrorMessage = "Примечание результата исследования не должен превышать 300 символов")]
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
         /// <summary> Вид исследования </summary>
         [Range(1, int.MaxValue, ErrorMessage = "Должен быть выбран вид исследования")]
         public int TypeResearchId { get; set; }
         [ForeignKey(nameof(TypeResearchId))]
         public TypeResearch TypeResearch { get; set; }
-
         /// <summary> Объект исследования </summary>
         [Range(1, int.MaxValue, ErrorMessage = "Должен быть выбран объект исследования")]
         public int ResearchObjectId { get; set; }
         [ForeignKey(nameof(ResearchObjectId))]
         public ResearchObject ResearchObject { get; set; }
-
         /// <summary> Лаборант </summary>
         [Range(1, int.MaxValue, ErrorMessage = "Должен быть выбран лаборант")]
         public int LabAssistantId { get; set; }
         [ForeignKey(nameof(LabAssistantId))]
         public LabAssistant LabAssistant { get; set; }
-
         /// <summary> Рабочая смена </summary>
         [Range(1, int.MaxValue, ErrorMessage = "Должена быть выбрана рабочая смена")]
         public int WorkShiftId { get; set; }

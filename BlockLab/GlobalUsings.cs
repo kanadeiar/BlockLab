@@ -6,3 +6,6 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using Microsoft.AspNetCore.Mvc;
 global using System.ComponentModel.DataAnnotations;
+global using Microsoft.EntityFrameworkCore;
+global using BlockLab.Dal.Data;
+global using BlockLab.Dal.TestData;

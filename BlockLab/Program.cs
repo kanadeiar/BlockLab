@@ -1,13 +1,19 @@
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.ConfigureServices(services =>
 {
+    services.AddDbContext<BlockLabContext>(options => options.UseSqlite(builder.Configuration.GetConnectionString("BlockLabConnection")));
+
     services.AddControllersWithViews().AddRazorRuntimeCompilation();
     services.AddRazorPages().AddRazorRuntimeCompilation();
 });
 builder.Services.AddServerSideBlazor();
 
 var app = builder.Build();
+
+BlockLabSeedTestData.SeedTestData(app.Services, builder.Configuration);
 
 if (app.Environment.IsDevelopment())
 {

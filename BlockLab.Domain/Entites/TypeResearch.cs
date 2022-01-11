@@ -28,7 +28,7 @@ namespace BlockLab.Domain.Entites
             BlockQualityResearch,
 
             /// <summary> Исследование шлама </summary>
-            SludgeResearch,
+            MudResearch,
 
             /// <summary> Исследование цемента </summary>
             CementReseatch,

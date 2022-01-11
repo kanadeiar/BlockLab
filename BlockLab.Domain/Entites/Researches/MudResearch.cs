@@ -3,7 +3,7 @@
 namespace BlockLab.Domain.Entites
 {
     /// <summary> Результат исследования шлама </summary>
-    [Table("BlockQualityReearches")]
+    [Table("MudReearches")]
     public class MudResearch : Research
     {
         /// <summary> Плотность </summary>
