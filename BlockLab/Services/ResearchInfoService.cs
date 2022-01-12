@@ -133,6 +133,7 @@ public class ResearchInfoService : IResearchInfoService
         model.AssistantSurName = r.LabAssistant.SurName;
         model.AssistantFirstName = r.LabAssistant.FirstName;
         model.AssistantPatronymic = r.LabAssistant.Patronymmic;
+        model.AssistantBirthday = r.LabAssistant.Birthday;
         model.WorkShiftName = r.WorkShift.Name;
         return model;
     }

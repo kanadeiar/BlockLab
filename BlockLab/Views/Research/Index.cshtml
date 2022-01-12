@@ -16,7 +16,7 @@
                 
                 <form method="get">
                     <label>Фильтр по названию:</label>
-                    <div class="input-group mb-1">
+                    <div class="input-group mb-3">
                         <input name="name" class="form-control" value="@Model.Filter.Name" placeholder="Введите часть названия"/>
                         <input type="submit" value="Фильтр" class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Отфильтровать результаты лабораторных анализов по части названия"/>
                     </div>
@@ -104,8 +104,8 @@
                 {
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="alert alert-danger">
-                                Результаты по такому запросу отсутствуют ...
+                            <div class="p-4 bg-warning bg-opacity-10 text-center">
+                                Результаты исследований по такому запросу отсутствуют в базе данных ...
                             </div>
                         </div>
                     </div>

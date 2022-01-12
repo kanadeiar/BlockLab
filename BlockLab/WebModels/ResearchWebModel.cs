@@ -15,5 +15,6 @@ public class ResearchWebModel
     public string AssistantSurName { get; set; }
     public string AssistantFirstName { get; set; }
     public string AssistantPatronymic { get; set; }
+    public DateTime AssistantBirthday { get; set; }
     public string WorkShiftName { get; set; }
 }
