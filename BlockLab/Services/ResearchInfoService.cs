@@ -59,7 +59,7 @@ public class ResearchInfoService : IResearchInfoService
             .Include(r => r.ResearchObject)
             .Include(r => r.LabAssistant)
             .Include(r => r.WorkShift)
-            .SingleAsync(r => r.Id == id);
+            .FirstOrDefaultAsync(r => r.Id == id);
         ResearchWebModel? model = null;
         if (r is BlockQualityResearch q)
         {

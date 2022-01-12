@@ -1,7 +1,7 @@
 ﻿namespace BlockLab.Tests.Services;
 
 [TestClass]
-public class ResearchInfoServiceTests
+public class ResearchInfoPagiServiceTests
 {
     private Random _rnd = new Random();
     private BlockLabContext _context;
@@ -25,27 +25,17 @@ public class ResearchInfoServiceTests
     }
 
     [TestMethod]
-    public void GetTop10Researches_Call_ShouldType()
+    public void GetPagiFilterSortResearches_Call_ShouldType()
     {
-        var service = new ResearchInfoService(_context);
+        var filter = new ResearchFilter();
+        var service = new ResearchInfoPagiService(_context);
 
-        var actual = service.GetTop10Researches().Result;
-
-        Assert
-            .IsInstanceOfType(actual, typeof(IEnumerable<ResearchWebModel>));
-        Assert
-            .AreEqual(1, actual.Count());
-    }
-
-    [TestMethod]
-    public void GetResearch_Call_ShouldType()
-    {
-        var service = new ResearchInfoService(_context);
-
-        var actual = service.GetResearch(1).Result;
+        var actual = service.GetPagiFilterSortResearches(filter).Result;
 
         Assert
-            .IsInstanceOfType(actual, typeof(ResearchWebModel));
+            .IsInstanceOfType(actual, typeof(ResearchPagiWebModel));
+        Assert
+            .AreEqual(1, actual.Researches.Count());
     }
 }
 
