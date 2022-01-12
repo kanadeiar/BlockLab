@@ -38,9 +38,17 @@
                                 {
                                     <span>Формат: <strong>@q.Format</strong> Марка: <strong>@q.Trademark</strong></span>
                                 }
-                                @if (m is CementResearchWebModel c)
+                                else if (m is CementResearchWebModel c)
                                 {
                                     <span>Откуда цемент: <strong>@c.FromName</strong></span>
+                                }
+                                else if (m is HammerBinderResearchWebModel h)
+                                {
+                                    <span>Активность: <strong>@h.Activiry</strong>%</span>
+                                }
+                                else if (m is MudResearchWebModel mu)
+                                {
+                                    <span>Плотность: <strong>@mu.Density</strong> кг/см2</span>
                                 }
                                 <span>@m.Note</span>
                                 <span>Лаборант: <strong>@m.LabAssistantSurFP</strong></span>

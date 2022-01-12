@@ -1,4 +1,5 @@
 ﻿@page "/online"
+@inherits OwningComponentBase<BlockLabContext>
 
 <PageTitle>Главная - Лаборатория</PageTitle>
 
@@ -11,14 +12,78 @@
         </div>
         <div class="col-md-9 mb-2">
             <div class="border-1 bg-light shadow rounded-1 p-2">
-                <h1 class="my-2 p-2"><span class="fa fa-home" aria-hidden="true"></span> Обзор результатов</h1>
+                <h1 class="my-2 p-2"><span class="fa fa-home" aria-hidden="true"></span> Обзор</h1>
 
-                <p>Обзор лабораторных данных.</p>
+                <p>Обзор последних введенных результатов анализов по лаборатории.</p>
                 
+                <h5>Последние результаты анализов:</h5>
+                
+                <ul class="list-group">
+                    @if (Researches is null)
+                    {
+                        <li class="list-group-item">Результаты Отсутствуют</li>
+                    }
+                    else
+                    {
+                        var i = 1;
+                        foreach (var r in Researches)
+                        {
+                            <li class="list-group-item @(r.IsNormal?"":"bg-danger bg-opacity-25")">
+                                <span>@(i++) Дата и время: <strong>@r.DateTime.ToString("dd.MM.yyyy HH:mm")</strong></span>
+                                <span>Название: <strong>@r.Name</strong></span>
+                                <span>Вид: <strong>@r.TypeResearch.Name</strong></span>
+                                <span>Результат: <strong>@((r.Value != 0.0) ? r.Value.ToString("F1") : "") @r.Text</strong></span>
+                                <span>Норма:<strong>@((r.IsNormal) ? "Да " : "Нет ")</strong></span> 
+                                @if (r is BlockQualityResearch q)
+                                {
+                                    <span>Формат: <strong>@q.Format</strong> Марка: <strong>@q.Trademark</strong> </span>
+                                }
+                                else if (r is CementResearch c)
+                                {
+                                    <span>Откуда цемент: <strong>@c.FromName </strong></span>
+                                }
+                                else if (r is HammerBinderResearch h)
+                                {
+                                    <span>Активность: <strong>@h.Activity.ToString("F1")</strong>% </span>
+                                }
+                                else if (r is MudResearch mu)
+                                {
+                                    <span>Плотность: <strong>@mu.Density</strong> кг/см2 </span>
+                                }
+                                <span>Лаборант: <strong>@r.LabAssistant.SurName @r.LabAssistant.FirstName @r.LabAssistant.Patronymmic</strong></span>
+                            </li>
+                        }
 
-
+                    }
+                </ul>
+                <div class="my-1">
+                    <button class="btn btn-success mb-1" @onclick="UpdateData">
+                        <i class="fa fa-heart"></i>
+                        Обновить
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+@code {
+    BlockLabContext _Context => Service;
+
+    private IQueryable<Research> _Query => _Context.Researches
+        .Include(r => r.TypeResearch)
+        .Include(r => r.LabAssistant)
+        .OrderByDescending(r => r.DateTime)
+        .Take(10);
+
+    public IEnumerable<Research>? Researches { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await UpdateData();
+    }
+    private async Task UpdateData()
+    {
+        Researches = await _Query.ToArrayAsync();
+    }
+}
