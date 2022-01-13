@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Blazor\Input\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 </Project>
