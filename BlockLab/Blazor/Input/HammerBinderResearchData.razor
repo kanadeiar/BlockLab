@@ -1,0 +1,109 @@
+﻿@page "/input/hammerbinder"
+@inherits OwningComponentBase<BlockLabContext>
+
+<PageTitle>Исследование молото-вяжущего - Лаборатория</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 mb-2">
+            <nav class="flex-column">
+                <_InputLeftSidebarPartial />
+            </nav>
+        </div>
+        <div class="col-md-9 mb-2">
+            <div class="border-1 bg-light shadow rounded-1 p-2">
+                <h1 class="my-2 p-2">Исследование молото-вяжущего</h1>
+
+                <p><strong>Вид исследования - исследование молото-вяжущего</strong></p>
+
+                <p>Результаты исследований за последние два месяца:</p>
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Дата и время</th>
+                                <th>Название</th>
+                                <th>Объект исследования</th>
+                                <th>Активность</th>
+                                <th>Результат</th>
+                                <th>Норма</th>
+                                <th>Лаборант</th>
+                                <th>Смена</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (HammerBinderResearches is null)
+                            {
+                                <tr><th colspan="9" class="p-4 text-center">Загрузка ...</th></tr>
+                            }
+                            else if (!HammerBinderResearches.Any())
+                            {
+                                <tr><th colspan="9" class="p-4 text-center">Данные отсутствуют</th></tr>
+                            }
+                            else
+                            {
+                                foreach (var e in HammerBinderResearches)
+                                {
+                                    <tr>
+                                        <td>@e.DateTime.ToString("dd.MM.yyyy") @e.DateTime.ToString("HH:mm")</td>
+                                        <td>@e.Name</td>
+                                        <td>@e.ResearchObject?.Name</td>
+                                        <td>@e.Activity %</td>
+                                        <td><strong>@e.Value.ToString("F1") %</strong> @e.Text</td>
+                                        <td>
+                                            @if (@e.IsNormal)
+                                            {
+                                                <strong class="text-success">Норма</strong>
+                                            }
+                                            else
+                                            {
+                                                <strong class="text-danger">Плохо</strong>
+                                            }
+                                        </td>
+                                        <td>@e.LabAssistant?.SurName @e.LabAssistant?.FirstName[0].@e.LabAssistant?.Patronymmic[0].</td>
+                                        <td>@e.WorkShift.Name</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="my-1">
+                    <NavLink class="btn btn-success mb-1" href="input/hammerbinder/create">
+                        <i class="fas fa-plus"></i>
+                        Добавить результат исследования
+                    </NavLink>
+                    <button class="btn btn-success mb-1" @onclick="UpdateData">
+                        <i class="fa fa-wifi"></i>
+                        Обновить
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    BlockLabContext _Context => Service;
+
+    private IQueryable<HammerBinderResearch> _Query => _Context.HammerBinderResearches
+        .Include(q => q.ResearchObject)
+        .Include(q => q.LabAssistant)
+        .Include(q => q.WorkShift)
+        .Where(q => q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(- DateTime.Today.Day))
+        .OrderByDescending(q => q.DateTime);
+
+    public IEnumerable<HammerBinderResearch>? HammerBinderResearches { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await UpdateData();
+    }
+    private async Task UpdateData()
+    {
+        HammerBinderResearches = await _Query.ToArrayAsync();
+    }
+}

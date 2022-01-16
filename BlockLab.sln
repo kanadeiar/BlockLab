@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlockLab.Dal", "BlockLab.Da
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B558CCE4-EE40-4C37-ACF6-3F8964C8EB30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlockLab.Tests", "Tests\BlockLab.Tests\BlockLab.Tests.csproj", "{35884771-0C0A-46B0-8972-5EC0113B8D8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlockLab.Tests", "Tests\BlockLab.Tests\BlockLab.Tests.csproj", "{35884771-0C0A-46B0-8972-5EC0113B8D8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

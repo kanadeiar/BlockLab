@@ -12,7 +12,7 @@ namespace BlockLab.Domain.Entites
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Название формата блока должно быть длинной от 2 до 100 символов")]
         public string Format { get; set; }
 
-        /// <summary> Формат блока </summary>
+        /// <summary> Марка блока </summary>
         [Required(ErrorMessage = "Название марки блока обязательно")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Название марки блока должно быть длинной от 2 до 100 символов")]
         public string Trademark { get; set; }

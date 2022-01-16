@@ -17,6 +17,7 @@ namespace BlockLab.Domain.Entites
         /// <summary> Главное значение - результат </summary>
         public double Value { get; set; }
         /// <summary> Текст результата исследования </summary>
+        [Required(ErrorMessage = "Текстовый результат исследования обязателен")]
         [MaxLength(300, ErrorMessage = "Текст результата исследования не должен превышать 300 символов")]
         public string Text { get; set; }
         /// <summary> Результат - норма </summary>

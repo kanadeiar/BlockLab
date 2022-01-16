@@ -1,0 +1,201 @@
+﻿@page "/input/cement/create"
+@inherits OwningComponentBase<BlockLabContext>
+@inject NavigationManager NavManager
+
+<link href="/css/BlazorValidation.css" rel="stylesheet" />
+
+<PageTitle>Добавление исследования цемента - Лаборатория</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 mb-2">
+            <nav class="flex-column">
+                <_InputLeftSidebarPartial />
+            </nav>
+        </div>
+        <div class="col-md-9 mb-2">
+            <div class="border-1 bg-light shadow rounded-1 p-2">
+                <h1 class="my-2 p-2">Добавление нового результата исследования качества блоков</h1>
+                <div>
+                    <NavLink class="btn btn-secondary" href="input/cement">Назад</NavLink>
+                </div>
+
+                @if (CementResearchData is null)
+                {
+                    <div class="row">
+                        <div class="p-5 text-center">Загрузка ...</div>
+                    </div>
+                }
+                else
+                {
+                    <EditForm Model="CementResearchData" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator/>
+                        <div class="col-md-6">
+                            <div>
+                                <label>Дата результата</label>
+                                <ValidationMessage For="@(() => CementResearchData.DateTime)" />
+                                <InputDate class="form-control" @bind-Value="CementResearchData.DateTime" />
+                            </div>
+                            <div>
+                                <label>Время результата</label>
+                                <ValidationMessage For="@(() => CementResearchData.DateTime)" />
+                                <input type="time" class="form-control" @bind="CementResearchData.DateTime" />
+                            </div>
+                            <div>
+                                <label>Название результата исследования</label>
+                                <ValidationMessage For="@(() => CementResearchData.Name)" />
+                                <InputText class="form-control" @bind-Value="CementResearchData.Name" />
+                            </div>
+                            <div>
+                                <label>Вид исследования</label>
+                                <p><strong>Вид исследования - исследование цемента</strong></p>
+                            </div>
+                            <div>
+                                <label>Объект исследования</label>
+                                <ValidationMessage For="@(() => CementResearchData.ResearchObjectId)" />
+                                <InputSelect class="form-select" @bind-Value="CementResearchData.ResearchObjectId">
+                                    <option selected value="0" disabled="disabled">Выберите объект исследования</option>
+                                    @foreach (var item in ResearchObjects.Keys)
+                                    {
+                                        <option value="@item">@ResearchObjects[item]</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div>
+                                <label>Результат числовой</label>
+                                <ValidationMessage For="@(() => CementResearchData.Value)" />
+                                <InputNumber class="form-control" @bind-Value="CementResearchData.Value" />
+                            </div>
+                            <div>
+                                <label>Результат текстовый:</label>
+                                <ValidationMessage For="@(() => CementResearchData.Text)" />
+                                <InputTextArea class="form-control" rows="3" @bind-Value="CementResearchData.Text" />
+                            </div>
+                            <div>
+                                <label>Нормальность результата</label>
+                                <ValidationMessage For="@(() => CementResearchData.IsNormal)" />
+                                <div class="form-check">
+                                    <InputCheckbox @bind-Value="CementResearchData.IsNormal" class="form-check-input" />
+                                    <label class="form-check-label">
+                                        Норма
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div>
+                                <label>Номер партии цемента:</label>
+                                <ValidationMessage For="@(() => CementResearchData.Party)" />
+                                <InputText class="form-control" @bind-Value="CementResearchData.Party" />
+                            </div>
+                            <div>
+                                <label>Паспорт, В/ц:</label>
+                                <ValidationMessage For="@(() => CementResearchData.PassportVc)" />
+                                <InputNumber class="form-control" @bind-Value="CementResearchData.PassportVc" />
+                            </div>
+                            <div>
+                                <label>Паспорт, н/сх:</label>
+                                <ValidationMessage For="@(() => CementResearchData.PassportNsh)" />
+                                <InputNumber class="form-control" @bind-Value="CementResearchData.PassportNsh" />
+                            </div>
+                            <div>
+                                <label>Паспорт, к/сх:</label>
+                                <ValidationMessage For="@(() => CementResearchData.PassportKsh)" />
+                                <InputNumber class="form-control" @bind-Value="CementResearchData.PassportKsh" />
+                            </div>
+                            <div>
+                                <label>Фактическое в/ц:</label>
+                                <ValidationMessage For="@(() => CementResearchData.ActualVc)" />
+                                <InputNumber class="form-control" @bind-Value="CementResearchData.ActualVc" />
+                            </div>
+                            <div>
+                                <label>Фактическое н/сх:</label>
+                                <ValidationMessage For="@(() => CementResearchData.ActualNsh)" />
+                                <InputNumber class="form-control" @bind-Value="CementResearchData.ActualNsh" />
+                            </div>
+                            <div>
+                                <label>Фактическое к/сх:</label>
+                                <ValidationMessage For="@(() => CementResearchData.ActualKsh)" />
+                                <InputNumber class="form-control" @bind-Value="CementResearchData.ActualKsh" />
+                            </div>
+                            <div>
+                                <label>Откуда привезли:</label>
+                                <ValidationMessage For="@(() => CementResearchData.FromName)" />
+                                <InputText class="form-control" @bind-Value="CementResearchData.FromName" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div>
+                                <label>Смена</label>
+                                <ValidationMessage For="@(() => CementResearchData.WorkShiftId)" />
+                                <InputSelect class="form-select" @bind-Value="CementResearchData.WorkShiftId">
+                                    <option selected value="0" disabled="disabled">Выберите смену</option>
+                                    @foreach (var item in WorkShifts.Keys)
+                                    {
+                                        <option value="@item">@WorkShifts[item]</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div>
+                                <label>Лаборант</label>
+                                <ValidationMessage For="@(() => CementResearchData.LabAssistantId)" />
+                                <InputSelect class="form-select" @bind-Value="CementResearchData.LabAssistantId">
+                                    <option selected value="null" disabled="disabled">Выберите лаборанта</option>
+                                    @foreach (var item in Assistans.Keys)
+                                    {
+                                        <option value="@item">@Assistans[item]</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div>
+                                <label>Примечание:</label>
+                                <ValidationMessage For="@(() => CementResearchData.Note)" />
+                                <InputTextArea class="form-control" rows="3" @bind-Value="CementResearchData.Note" />
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-success">Сохранить</button>
+                        </div>
+                    </EditForm>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    BlockLabContext _Context => Service;
+
+    public CementResearch? CementResearchData { get; set; }
+    public IDictionary<int, string> ResearchObjects { get; set; } = new Dictionary<int, string>();
+    public IDictionary<int, string> WorkShifts { get; set; } = new Dictionary<int, string>();
+    public IDictionary<int, string> Assistans { get; set; } = new Dictionary<int, string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        CementResearchData = new CementResearch
+        {
+            DateTime = DateTime.Now.AddSeconds(-DateTime.Now.Second),
+            TypeResearchId = (await _Context.TypeResearches.FirstAsync(tr => tr.Name == Names.CementName)).Id,
+        };
+        ResearchObjects = await _Context.ResearchObjects.ToDictionaryAsync(r => r.Id, r => r.Name);
+        WorkShifts = await _Context.WorkShifts.ToDictionaryAsync(w => w.Id, w => w.Name);
+        Assistans = await _Context.LabAssistants
+            .Where(u => !u.IsInactive)
+            .ToDictionaryAsync(u => u.Id, u => $"{u.SurName} {u.FirstName} {u.Patronymmic}");
+    }
+
+    public async Task HandleValidSubmit()
+    {
+        _Context.CementResearches.Add(CementResearchData);
+        await _Context.SaveChangesAsync();
+
+        NavManager.NavigateTo("input/cement");
+    }
+}
