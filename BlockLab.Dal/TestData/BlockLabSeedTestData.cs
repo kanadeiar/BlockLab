@@ -75,12 +75,12 @@ public static class BlockLabSeedTestData
             context.ResearchObjects.AddRange(ro1, ro2, ro3, ro4, ro5, ro6, ro7, ro8);
             await context.SaveChangesAsync();
 
-            var tr1 = new TypeResearch { Name = "Исследование растекаемости", TypeResult = TypeResearch.ItTypeResult.Simple };
-            var tr2 = new TypeResearch { Name = "Визуальный осмотр", TypeResult = TypeResearch.ItTypeResult.Simple };
-            var tr3 = new TypeResearch { Name = "Исследование качества блоков", TypeResult = TypeResearch.ItTypeResult.BlockQualityResearch };
-            var tr4 = new TypeResearch { Name = "Исследование цемента", TypeResult = TypeResearch.ItTypeResult.CementReseatch };
-            var tr5 = new TypeResearch { Name = "Исследование молото-вяжущего", TypeResult = TypeResearch.ItTypeResult.HammerBinderResearch };
-            var tr6 = new TypeResearch { Name = "Исследование шлама", TypeResult = TypeResearch.ItTypeResult.MudResearch };
+            var tr1 = new TypeResearch { Name = Names.VeguenessName, TypeResult = TypeResearch.ItTypeResult.Simple };
+            var tr2 = new TypeResearch { Name = Names.VisualName, TypeResult = TypeResearch.ItTypeResult.Simple };
+            var tr3 = new TypeResearch { Name = Names.BlockQualityName, TypeResult = TypeResearch.ItTypeResult.BlockQualityResearch };
+            var tr4 = new TypeResearch { Name = Names.CementName, TypeResult = TypeResearch.ItTypeResult.CementReseatch };
+            var tr5 = new TypeResearch { Name = Names.HammerBinderName, TypeResult = TypeResearch.ItTypeResult.HammerBinderResearch };
+            var tr6 = new TypeResearch { Name = Names.MudName, TypeResult = TypeResearch.ItTypeResult.MudResearch };
             context.TypeResearches.AddRange(tr1, tr2, tr3, tr4, tr5, tr6);
             await context.SaveChangesAsync();
 
@@ -95,7 +95,7 @@ public static class BlockLabSeedTestData
             var workshifts = await context.WorkShifts.ToDictionaryAsync(i => i.Id, i => i);
             context.Researches.AddRange(Enumerable.Range(1, 20).Select(i => new Research
             {
-                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(- rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат исследования № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Результат удовлетворителен",
@@ -107,7 +107,7 @@ public static class BlockLabSeedTestData
             }));
             context.Researches.AddRange(Enumerable.Range(1, 10).Select(i => new Research
             {
-                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(- rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат исследования № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Результат плохой",
@@ -120,7 +120,7 @@ public static class BlockLabSeedTestData
             }));
             context.Researches.AddRange(Enumerable.Range(1, 5).Select(i => new Research
             {
-                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(- rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат внешнего осмотра № {rnd.Next(100)}",
                 Text = "Линзы, Сколы от подрезного слоя, Следы от решеток.",
                 IsNormal = true,
@@ -132,7 +132,7 @@ public static class BlockLabSeedTestData
             await context.SaveChangesAsync();
             context.BlockQualityResearches.AddRange(Enumerable.Range(1, 10).Select(i => new BlockQualityResearch
             {
-                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(- rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат по качеству блоков № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Удовлетворительно.",
@@ -159,7 +159,7 @@ public static class BlockLabSeedTestData
             await context.SaveChangesAsync();
             context.CementResearches.AddRange(Enumerable.Range(1, 10).Select(i => new CementResearch
             {
-                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(- rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат по цементу № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Удовлетворительно.",
@@ -180,7 +180,7 @@ public static class BlockLabSeedTestData
             await context.SaveChangesAsync();
             context.HammerBinderResearches.AddRange(Enumerable.Range(1, 10).Select(i => new HammerBinderResearch
             {
-                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(- rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат по молото-вяжущему № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Удовлетворительно.",
@@ -197,7 +197,7 @@ public static class BlockLabSeedTestData
             await context.SaveChangesAsync();
             context.MudResearches.AddRange(Enumerable.Range(1, 10).Select(i => new MudResearch
             {
-                DateTime = DateTime.Today.AddDays(rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
+                DateTime = DateTime.Today.AddDays(- rnd.Next(12)).AddHours(rnd.Next(14)).AddMinutes(rnd.Next(59)),
                 Name = $"Результат по шламу № {rnd.Next(100)}",
                 Value = rnd.NextDouble() * 100.0,
                 Text = "Удовлетворительно.",
