@@ -1,0 +1,257 @@
+﻿@page "/edit/blockquality/edit/{id:int}"
+@page "/edit/blockquality/create"
+@inherits OwningComponentBase<BlockLabContext>
+@inject NavigationManager NavManager
+
+<PageTitle>@Mode - Лаборатория</PageTitle>
+
+<link href="/css/BlazorValidation.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 mb-2">
+            <nav class="flex-column">
+                <_EditLeftSidebarPartial />
+            </nav>
+        </div>
+        <div class="col-md-9 mb-2">
+            <div class="border-1 bg-light shadow rounded-1 p-2">
+                <h1 class="my-2 p-2 bg-@Theme text-@TextColor">@Mode</h1>
+                <div>
+                    <NavLink class="btn btn-secondary" href="edit/blockquality">
+                        <i class="fa fa-arrow-left"></i>
+                        Назад
+                    </NavLink>
+                </div>
+
+                @if (ResearchData is null)
+                {
+                    <div class="row">
+                        <div class="p-5 text-center">Загрузка ...</div>
+                    </div>
+                }
+                else
+                {
+                    <EditForm Model="ResearchData" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <div class="col-md-6">
+                            @if (!IsModeCreate)
+                            {
+                                <div>
+                                    <label>ID</label>
+                                    <InputNumber class="form-control" @bind-Value="ResearchData.Id" disabled />
+                                </div>
+                            }
+                            <div>
+                                <label>Дата результата</label>
+                                <ValidationMessage For="@(() => ResearchData.DateTime)" />
+                                <InputDate class="form-control" @bind-Value="ResearchData.DateTime" />
+                            </div>
+                            <div>
+                                <label>Время результата</label>
+                                <ValidationMessage For="@(() => ResearchData.DateTime)" />
+                                <input type="time" class="form-control" @bind="ResearchData.DateTime" />
+                            </div>
+                            <div>
+                                <label>Название результата исследования</label>
+                                <ValidationMessage For="@(() => ResearchData.Name)" />
+                                <InputText class="form-control" @bind-Value="ResearchData.Name" />
+                            </div>
+                            <div>
+                                <label>Вид исследования</label>
+                                <p><strong>Вид исследования - качество блоков</strong></p>
+                            </div>
+                            <div>
+                                <label>Объект исследования</label>
+                                <ValidationMessage For="@(() => ResearchData.ResearchObjectId)" />
+                                <InputSelect class="form-select" @bind-Value="ResearchData.ResearchObjectId">
+                                    <option selected value="0" disabled="disabled">Выберите объект исследования</option>
+                                    @foreach (var item in ResearchObjects.Keys)
+                                    {
+                                        <option value="@item">@ResearchObjects[item]</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div>
+                                <label>Результат числовой</label>
+                                <ValidationMessage For="@(() => ResearchData.Value)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.Value" />
+                            </div>
+                            <div>
+                                <label>Результат текстовый:</label>
+                                <ValidationMessage For="@(() => ResearchData.Text)" />
+                                <InputTextArea class="form-control" rows="3" @bind-Value="ResearchData.Text" />
+                            </div>
+                            <div>
+                                <label>Нормальность результата</label>
+                                <ValidationMessage For="@(() => ResearchData.IsNormal)" />
+                                <div class="form-check">
+                                    <InputCheckbox @bind-Value="ResearchData.IsNormal" class="form-check-input" />
+                                    <label class="form-check-label">
+                                        Норма
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div>
+                                <label>Формат блока</label>
+                                <ValidationMessage For="@(() => ResearchData.Format)" />
+                                <InputText class="form-control" @bind-Value="ResearchData.Format" />
+                            </div>
+                            <div>
+                                <label>Марка блока</label>
+                                <ValidationMessage For="@(() => ResearchData.Trademark)" />
+                                <InputText class="form-control" @bind-Value="ResearchData.Trademark" />
+                            </div>
+                            <div>
+                                <label>Вес образца, г:</label>
+                                <ValidationMessage For="@(() => ResearchData.Weight)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.Weight" />
+                            </div>
+                            <div>
+                                <label>Длинна образца, см:</label>
+                                <ValidationMessage For="@(() => ResearchData.SizeX)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.SizeX" />
+                            </div>
+                            <div>
+                                <label>Ширина образца, см:</label>
+                                <ValidationMessage For="@(() => ResearchData.SizeY)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.SizeY" />
+                            </div>
+                            <div>
+                                <label>Высота образца, см:</label>
+                                <ValidationMessage For="@(() => ResearchData.SizeZ)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.SizeZ" />
+                            </div>
+                            <div>
+                                <label>Плотность образца в сыром виде, кг/см3:</label>
+                                <ValidationMessage For="@(() => ResearchData.RawDensity)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.RawDensity" />
+                            </div>
+                            <div>
+                                <label>Коэффициент:</label>
+                                <ValidationMessage For="@(() => ResearchData.Coefficient)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.Coefficient" />
+                            </div>
+                            <div>
+                                <label>Масса навески до высушивания, г:</label>
+                                <ValidationMessage For="@(() => ResearchData.RawWeight)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.RawWeight" />
+                            </div>
+                            <div>
+                                <label>Масса навески(сушеная), г:</label>
+                                <ValidationMessage For="@(() => ResearchData.DriedWeight)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.DriedWeight" />
+                            </div>
+                            <div>
+                                <label>Влажность, W%:</label>
+                                <ValidationMessage For="@(() => ResearchData.Humidity)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.Humidity" />
+                            </div>
+                            <div>
+                                <label>Нагрузка, г:</label>
+                                <ValidationMessage For="@(() => ResearchData.Load)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.Load" />
+                            </div>
+                            <div>
+                                <label>Прочность, %:</label>
+                                <ValidationMessage For="@(() => ResearchData.Strength)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.Strength" />
+                            </div>
+                            <div>
+                                <label>Плотность в сухом виде, %:</label>
+                                <ValidationMessage For="@(() => ResearchData.DriedDensity)" />
+                                <InputNumber class="form-control" @bind-Value="ResearchData.DriedDensity" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div>
+                                <label>Смена</label>
+                                <ValidationMessage For="@(() => ResearchData.WorkShiftId)" />
+                                <InputSelect class="form-select" @bind-Value="ResearchData.WorkShiftId">
+                                    <option selected value="0" disabled="disabled">Выберите смену</option>
+                                    @foreach (var item in WorkShifts.Keys)
+                                    {
+                                        <option value="@item">@WorkShifts[item]</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                            <div>
+                                <label>Лаборант</label>
+                                <ValidationMessage For="@(() => ResearchData.LabAssistantId)" />
+                                <InputSelect class="form-select" @bind-Value="ResearchData.LabAssistantId">
+                                    <option selected value="null" disabled="disabled">Выберите лаборанта</option>
+                                    @foreach (var item in Assistans.Keys)
+                                    {
+                                        <option value="@item">@Assistans[item]</option>
+                                    }
+                                </InputSelect>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div>
+                                <label>Примечание:</label>
+                                <ValidationMessage For="@(() => ResearchData.Note)" />
+                                <InputTextArea class="form-control" rows="3" @bind-Value="ResearchData.Note" />
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-@Theme">Сохранить</button>
+                        </div>
+                    </EditForm>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    BlockLabContext _Context => Service;
+    [Parameter]
+    public int Id { get; set; }
+    public bool IsModeCreate => Id == 0;
+
+    public BlockQualityResearch? ResearchData { get; set; }
+    public IDictionary<int, string> ResearchObjects { get; set; } = new Dictionary<int, string>();
+    public IDictionary<int, string> WorkShifts { get; set; } = new Dictionary<int, string>();
+    public IDictionary<int, string> Assistans { get; set; } = new Dictionary<int, string>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (IsModeCreate)
+        {
+            ResearchData = new BlockQualityResearch
+            {
+                DateTime = DateTime.Now.AddSeconds(-DateTime.Now.Second),
+                TypeResearchId = (await _Context.TypeResearches.FirstAsync(tr => tr.Name == Names.BlockQualityName)).Id,
+            };
+        }
+        else
+            ResearchData = await _Context.BlockQualityResearches.FindAsync(Id);
+        ResearchObjects = await _Context.ResearchObjects.ToDictionaryAsync(r => r.Id, r => r.Name);
+        WorkShifts = await _Context.WorkShifts.ToDictionaryAsync(w => w.Id, w => w.Name);
+        Assistans = await _Context.LabAssistants
+            .Where(u => !u.IsInactive)
+            .ToDictionaryAsync(u => u.Id, u => $"{u.SurName} {u.FirstName} {u.Patronymmic}");
+    }
+
+    public async Task HandleValidSubmit()
+    {
+        if (IsModeCreate)
+        {
+            _Context.BlockQualityResearches.Add(ResearchData);
+        }        
+        await _Context.SaveChangesAsync();
+        NavManager.NavigateTo("edit/blockquality");
+    }
+
+    public string Mode => IsModeCreate ? "Добавление нового исследования" : "Редактирование данных исследования";
+    public string Theme => IsModeCreate ? "success" : "info";
+    public string TextColor => IsModeCreate ? "white" : "dark";
+}
+

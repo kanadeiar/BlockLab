@@ -74,6 +74,7 @@
         .Include(r => r.TypeResearch)
         .Include(r => r.LabAssistant)
         .OrderByDescending(r => r.DateTime)
+        .Where(r => !r.IsDelete)
         .Take(10);
 
     public IEnumerable<Research>? Researches { get; set; }
