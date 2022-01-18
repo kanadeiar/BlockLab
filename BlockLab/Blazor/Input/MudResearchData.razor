@@ -35,11 +35,15 @@
                         <tbody>
                             @if (MudResearches is null)
                             {
-                                <tr><th colspan="9" class="p-4 text-center">Загрузка ...</th></tr>
+                                <tr>
+                                    <th colspan="9" class="p-4 text-center">Загрузка ...</th>
+                                </tr>
                             }
                             else if (!MudResearches.Any())
                             {
-                                <tr><th colspan="9" class="p-4 text-center">Данные отсутствуют</th></tr>
+                                <tr>
+                                    <th colspan="9" class="p-4 text-center">Данные отсутствуют</th>
+                                </tr>
                             }
                             else
                             {
@@ -61,7 +65,8 @@
                                                 <strong class="text-danger">Плохо</strong>
                                             }
                                         </td>
-                                        <td>@e.LabAssistant?.SurName @e.LabAssistant?.FirstName[0].@e.LabAssistant?.Patronymmic[0].</td>
+                                        <td>@e.LabAssistant?.SurName
+                                            @e.LabAssistant?.FirstName[0].@e.LabAssistant?.Patronymmic[0].</td>
                                         <td>@e.WorkShift.Name</td>
                                     </tr>
                                 }
@@ -90,11 +95,11 @@
     BlockLabContext _Context => Service;
 
     private IQueryable<MudResearch> _Query => _Context.MudResearches
-        .Include(q => q.ResearchObject)
-        .Include(q => q.LabAssistant)
-        .Include(q => q.WorkShift)
-        .Where(q => q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(- DateTime.Today.Day))
-        .OrderByDescending(q => q.DateTime);
+    .Include(q => q.ResearchObject)
+    .Include(q => q.LabAssistant)
+    .Include(q => q.WorkShift)
+    .Where(q => q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(-DateTime.Today.Day) && !q.IsDelete)
+    .OrderByDescending(q => q.DateTime);
 
     public IEnumerable<MudResearch>? MudResearches { get; set; }
 

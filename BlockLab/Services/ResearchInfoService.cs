@@ -17,6 +17,7 @@ public class ResearchInfoService : IResearchInfoService
                      .Include(r => r.ResearchObject)
                      .Include(r => r.LabAssistant)
                      .Include(r => r.WorkShift)
+                     .Where(r => !r.IsDelete)
                      .ToArrayAsync())
         {
             ResearchWebModel? model = null;

@@ -1,0 +1,178 @@
+﻿@page "/edit/blockquality"
+@page "/edit/blockquality/{istrash:bool}"
+@inherits OwningComponentBase<BlockLabContext>
+
+<PageTitle>@Mode - Лаборатория</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 mb-2">
+            <nav class="flex-column">
+                <_EditLeftSidebarPartial />
+            </nav>
+        </div>
+        <div class="col-md-9 mb-2">
+            <div class="border-1 bg-light shadow rounded-1 p-2">
+                <h1 class="my-2 p-2">@Mode</h1>
+
+                <p><strong>Вид исследования - качество блоков</strong></p>
+
+                <p>Результаты исследований качества блоков за последние два месяца:</p>
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Дата и время</th>
+                                <th>Название</th>
+                                <th>Объект исследования</th>
+                                <th>Формат</th>
+                                <th>Марка</th>
+                                <th>Результат</th>
+                                <th>Норма</th>
+                                <th>Лаборант</th>
+                                <th>Смена</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Researches is null)
+                            {
+                                <tr><th colspan="9" class="p-4 text-center">Загрузка ...</th></tr>
+                            }
+                            else if (!Researches.Any())
+                            {
+                                <tr><th colspan="9" class="p-4 text-center">Данные отсутствуют</th></tr>
+                            }
+                            else
+                            {
+                                foreach (var e in Researches)
+                                {
+                                    <tr>
+                                        <td>@e.DateTime.ToString("dd.MM.yyyy") @e.DateTime.ToString("HH:mm")</td>
+                                        <td>@e.Name</td>
+                                        <td>@e.ResearchObject?.Name</td>
+                                        <td>@e.Format</td>
+                                        <td>@e.Trademark</td>
+                                        <td><strong>@e.Value.ToString("F1") %</strong> @e.Text</td>
+                                        <td>
+                                            @if (@e.IsNormal)
+                                            {
+                                                <strong class="text-success">Норма</strong>
+                                            }
+                                            else
+                                            {
+                                                <strong class="text-danger">Плохо</strong>
+                                            }
+                                        </td>
+                                        <td>@e.LabAssistant?.SurName @e.LabAssistant?.FirstName[0].@e.LabAssistant?.Patronymmic[0].</td>
+                                        <td>@e.WorkShift.Name</td>
+                                        <td class="text-center">
+                                            @if (!IsTrash)
+                                            {
+                                                <NavLink class="btn btn-sm btn-info mb-1" href="@($"edit/blockquality/edit/{e.Id}")">
+                                                    <i class="fas fa-edit"></i>
+                                                    Редактировать
+                                                </NavLink>
+                                                <button class="btn btn-sm btn-warning mb-1" @onclick="@( () => HandleTrash(e) )">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-sm btn-success mb-1" @onclick="@( () => HandleUndoTrash(e) )">
+                                                    <i class="fas fa-undo"></i>
+                                                    Вернуть из корзины
+                                                </button>
+                                                <button class="btn btn-sm btn-danger mb-1" @onclick="@( () => HandleDelete(e) )">
+                                                    <i class="fas fa-times"></i>
+                                                    Удалить совсем
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="my-1">
+                    @if (!IsTrash)
+                    {
+                        <NavLink class="btn btn-success mb-1" href="edit/blockquality/create"> 
+                            <i class="fas fa-plus"></i>
+                            Добавить
+                        </NavLink>
+                        <NavLink class="btn btn-secondary mb-1" href="@($"edit/blockquality/{true}")">
+                            <i class="fas fa-trash"></i>
+                            Корзина
+                        </NavLink>
+                        <button class="btn btn-info mb-1" @onclick="@( () => UpdateData() )">
+                            <i class="fa fa-wifi"></i>
+                            Обновить
+                        </button>
+                    }
+                    else
+                    {
+                        <NavLink class="btn btn-secondary mb-1" href="edit/blockquality">
+                            <i class="fa fa-arrow-left"></i>
+                            Назад
+                        </NavLink>
+                        <button class="btn btn-info mb-1" @onclick="@( () => UpdateData() )">
+                            <i class="fa fa-wifi"></i>
+                            Обновить
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    BlockLabContext _Context => Service;
+    [Parameter]
+    public bool IsTrash { get; set; }
+    private IQueryable<BlockQualityResearch> _Query => _Context.BlockQualityResearches
+        .Include(q => q.ResearchObject)
+        .Include(q => q.LabAssistant)
+        .Include(q => q.WorkShift)
+        .Where(q => q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(- DateTime.Today.Day))
+        .OrderByDescending(q => q.DateTime);
+
+    public IEnumerable<BlockQualityResearch>? Researches { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await UpdateData();
+    }
+    private async Task UpdateData()
+    {
+        Researches = (!IsTrash) 
+            ? await _Query.Where(p => !p.IsDelete).ToArrayAsync() 
+            : await _Query.Where(p => p.IsDelete).ToArrayAsync();
+    }
+
+    public async Task HandleTrash(Research r)
+    {
+        r.IsDelete = true;
+        await _Context.SaveChangesAsync();
+        await UpdateData();
+    }
+    public async Task HandleUndoTrash(Research r)
+    {
+        r.IsDelete = false;
+        await _Context.SaveChangesAsync();
+        await UpdateData();
+    }
+    public async Task HandleDelete(Research r)
+    {
+        _Context.Remove<Research>(r);
+        await _Context.SaveChangesAsync();
+        await UpdateData();
+    }
+
+    public string Mode => IsTrash ? "Корзина удаленных результатов анализов" : "Редактирование результатов анализов";
+}
+
