@@ -93,7 +93,7 @@
         .Include(q => q.ResearchObject)
         .Include(q => q.LabAssistant)
         .Include(q => q.WorkShift)
-        .Where(q => q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(- DateTime.Today.Day))
+        .Where(q => q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(- DateTime.Today.Day) && !q.IsDelete)
         .OrderByDescending(q => q.DateTime);
 
     public IEnumerable<HammerBinderResearch>? HammerBinderResearches { get; set; }

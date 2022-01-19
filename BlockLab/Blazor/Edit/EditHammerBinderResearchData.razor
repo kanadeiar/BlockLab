@@ -1,5 +1,5 @@
-﻿@page "/edit/cement"
-@page "/edit/cement/{istrash:bool}"
+@page "/edit/hammerbinder"
+@page "/edit/hammerbinder/{istrash:bool}"
 @inherits OwningComponentBase<BlockLabContext>
 
 <PageTitle>@Mode - Лаборатория</PageTitle>
@@ -15,9 +15,9 @@
             <div class="border-1 bg-light shadow rounded-1 p-2">
                 <h1 class="my-2 p-2">@Mode</h1>
 
-                <p><strong>Вид исследования - цемент</strong></p>
+                <p><strong>Вид исследования - молото-вяжущее</strong></p>
 
-                <p>Результаты исследований цемента за последние два месяца:</p>
+                <p>Результаты исследований молото-вяжущего за последние два месяца:</p>
 
                 <div class="table-responsive">
                     <table class="table table-sm table-bordered table-striped">
@@ -26,8 +26,7 @@
                                 <th>Дата и время</th>
                                 <th>Название</th>
                                 <th>Объект исследования</th>
-                                <th>Номер партии</th>
-                                <th>Откуда</th>
+                                <th>Активность</th>
                                 <th>Результат</th>
                                 <th>Норма</th>
                                 <th>Лаборант</th>
@@ -56,8 +55,7 @@
                                         <td>@e.DateTime.ToString("dd.MM.yyyy") @e.DateTime.ToString("HH:mm")</td>
                                         <td>@e.Name</td>
                                         <td>@e.ResearchObject?.Name</td>
-                                        <td>@e.Party</td>
-                                        <td>@e.FromName</td>
+                                        <td>@e.Activity</td>
                                         <td><strong>@e.Value.ToString("F1") %</strong> @e.Text</td>
                                         <td>
                                             @if (@e.IsNormal)
@@ -75,7 +73,8 @@
                                         <td class="text-center">
                                             @if (!IsTrash)
                                             {
-                                                <NavLink class="btn btn-sm btn-info mb-1" href="@($"edit/cement/edit/{e.Id}")">
+                                                <NavLink class="btn btn-sm btn-info mb-1"
+                                        href="@($"edit/hammerbinder/edit/{e.Id}")">
                                                     <i class="fas fa-edit"></i>
                                                     Редактировать
                                                 </NavLink>
@@ -106,11 +105,11 @@
                 <div class="my-1">
                     @if (!IsTrash)
                     {
-                        <NavLink class="btn btn-success mb-1" href="edit/cement/create">
+                        <NavLink class="btn btn-success mb-1" href="edit/hammerbinder/create">
                             <i class="fas fa-plus"></i>
                             Добавить
                         </NavLink>
-                        <NavLink class="btn btn-secondary mb-1" href="@($"edit/cement/{true}")">
+                        <NavLink class="btn btn-secondary mb-1" href="@($"edit/hammerbinder/{true}")">
                             <i class="fas fa-trash"></i>
                             Корзина
                         </NavLink>
@@ -121,7 +120,7 @@
                     }
                     else
                     {
-                        <NavLink class="btn btn-secondary mb-1" href="edit/cement">
+                        <NavLink class="btn btn-secondary mb-1" href="edit/hammerbinder">
                             <i class="fa fa-arrow-left"></i>
                             Назад
                         </NavLink>
@@ -140,14 +139,14 @@
     BlockLabContext _Context => Service;
     [Parameter]
     public bool IsTrash { get; set; }
-    private IQueryable<CementResearch> _Query => _Context.CementResearches
+    private IQueryable<HammerBinderResearch> _Query => _Context.HammerBinderResearches
     .Include(q => q.ResearchObject)
     .Include(q => q.LabAssistant)
     .Include(q => q.WorkShift)
     .Where(q => q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(-DateTime.Today.Day))
     .OrderByDescending(q => q.DateTime);
 
-    public IEnumerable<CementResearch>? Researches { get; set; }
+    public IEnumerable<HammerBinderResearch>? Researches { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -160,21 +159,21 @@
         : await _Query.Where(p => p.IsDelete).ToArrayAsync();
     }
 
-    public async Task HandleTrash(CementResearch r)
+    public async Task HandleTrash(HammerBinderResearch r)
     {
         r.IsDelete = true;
         await _Context.SaveChangesAsync();
         await UpdateData();
     }
-    public async Task HandleUndoTrash(CementResearch r)
+    public async Task HandleUndoTrash(HammerBinderResearch r)
     {
         r.IsDelete = false;
         await _Context.SaveChangesAsync();
         await UpdateData();
     }
-    public async Task HandleDelete(CementResearch r)
+    public async Task HandleDelete(HammerBinderResearch r)
     {
-        _Context.Remove<CementResearch>(r);
+        _Context.Remove<HammerBinderResearch>(r);
         await _Context.SaveChangesAsync();
         await UpdateData();
     }

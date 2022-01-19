@@ -1,5 +1,5 @@
-﻿@page "/edit/cement"
-@page "/edit/cement/{istrash:bool}"
+@page "/edit/mud"
+@page "/edit/mud/{istrash:bool}"
 @inherits OwningComponentBase<BlockLabContext>
 
 <PageTitle>@Mode - Лаборатория</PageTitle>
@@ -15,9 +15,9 @@
             <div class="border-1 bg-light shadow rounded-1 p-2">
                 <h1 class="my-2 p-2">@Mode</h1>
 
-                <p><strong>Вид исследования - цемент</strong></p>
+                <p><strong>Вид исследования - шлам</strong></p>
 
-                <p>Результаты исследований цемента за последние два месяца:</p>
+                <p>Результаты исследований шлама за последние два месяца:</p>
 
                 <div class="table-responsive">
                     <table class="table table-sm table-bordered table-striped">
@@ -26,8 +26,7 @@
                                 <th>Дата и время</th>
                                 <th>Название</th>
                                 <th>Объект исследования</th>
-                                <th>Номер партии</th>
-                                <th>Откуда</th>
+                                <th>Плотность шлама</th>
                                 <th>Результат</th>
                                 <th>Норма</th>
                                 <th>Лаборант</th>
@@ -56,8 +55,7 @@
                                         <td>@e.DateTime.ToString("dd.MM.yyyy") @e.DateTime.ToString("HH:mm")</td>
                                         <td>@e.Name</td>
                                         <td>@e.ResearchObject?.Name</td>
-                                        <td>@e.Party</td>
-                                        <td>@e.FromName</td>
+                                        <td>@e.Density</td>
                                         <td><strong>@e.Value.ToString("F1") %</strong> @e.Text</td>
                                         <td>
                                             @if (@e.IsNormal)
@@ -75,7 +73,7 @@
                                         <td class="text-center">
                                             @if (!IsTrash)
                                             {
-                                                <NavLink class="btn btn-sm btn-info mb-1" href="@($"edit/cement/edit/{e.Id}")">
+                                                <NavLink class="btn btn-sm btn-info mb-1" href="@($"edit/mud/edit/{e.Id}")">
                                                     <i class="fas fa-edit"></i>
                                                     Редактировать
                                                 </NavLink>
@@ -106,11 +104,11 @@
                 <div class="my-1">
                     @if (!IsTrash)
                     {
-                        <NavLink class="btn btn-success mb-1" href="edit/cement/create">
+                        <NavLink class="btn btn-success mb-1" href="edit/mud/create">
                             <i class="fas fa-plus"></i>
                             Добавить
                         </NavLink>
-                        <NavLink class="btn btn-secondary mb-1" href="@($"edit/cement/{true}")">
+                        <NavLink class="btn btn-secondary mb-1" href="@($"edit/mud/{true}")">
                             <i class="fas fa-trash"></i>
                             Корзина
                         </NavLink>
@@ -121,7 +119,7 @@
                     }
                     else
                     {
-                        <NavLink class="btn btn-secondary mb-1" href="edit/cement">
+                        <NavLink class="btn btn-secondary mb-1" href="edit/mud">
                             <i class="fa fa-arrow-left"></i>
                             Назад
                         </NavLink>
@@ -140,14 +138,14 @@
     BlockLabContext _Context => Service;
     [Parameter]
     public bool IsTrash { get; set; }
-    private IQueryable<CementResearch> _Query => _Context.CementResearches
+    private IQueryable<MudResearch> _Query => _Context.MudResearches
     .Include(q => q.ResearchObject)
     .Include(q => q.LabAssistant)
     .Include(q => q.WorkShift)
     .Where(q => q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(-DateTime.Today.Day))
     .OrderByDescending(q => q.DateTime);
 
-    public IEnumerable<CementResearch>? Researches { get; set; }
+    public IEnumerable<MudResearch>? Researches { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -160,21 +158,21 @@
         : await _Query.Where(p => p.IsDelete).ToArrayAsync();
     }
 
-    public async Task HandleTrash(CementResearch r)
+    public async Task HandleTrash(MudResearch r)
     {
         r.IsDelete = true;
         await _Context.SaveChangesAsync();
         await UpdateData();
     }
-    public async Task HandleUndoTrash(CementResearch r)
+    public async Task HandleUndoTrash(MudResearch r)
     {
         r.IsDelete = false;
         await _Context.SaveChangesAsync();
         await UpdateData();
     }
-    public async Task HandleDelete(CementResearch r)
+    public async Task HandleDelete(MudResearch r)
     {
-        _Context.Remove<CementResearch>(r);
+        _Context.Remove<MudResearch>(r);
         await _Context.SaveChangesAsync();
         await UpdateData();
     }

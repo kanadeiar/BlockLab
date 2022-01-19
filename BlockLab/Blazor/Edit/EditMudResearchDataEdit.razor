@@ -1,5 +1,5 @@
-﻿@page "/edit/cement/edit/{id:int}"
-@page "/edit/cement/create"
+@page "/edit/mud/edit/{id:int}"
+@page "/edit/mud/create"
 @inherits OwningComponentBase<BlockLabContext>
 @inject NavigationManager NavManager
 
@@ -18,7 +18,7 @@
             <div class="border-1 bg-light shadow rounded-1 p-2">
                 <h1 class="my-2 p-2 bg-@Theme text-@TextColor">@Mode</h1>
                 <div>
-                    <NavLink class="btn btn-secondary" href="edit/cement">
+                    <NavLink class="btn btn-secondary" href="edit/mud">
                         <i class="fa fa-arrow-left"></i>
                         Назад
                     </NavLink>
@@ -96,44 +96,39 @@
 
                     <div class="col-md-6">
                         <div>
-                            <label>Номер партии цемента:</label>
-                            <ValidationMessage For="@(() => ResearchData.Party)" />
-                            <InputText class="form-control" @bind-Value="ResearchData.Party" />
+                            <label>Плотность:</label>
+                            <ValidationMessage For="@(() => ResearchData.Density)" />
+                            <InputNumber class="form-control" @bind-Value="ResearchData.Density" />
                         </div>
                         <div>
-                            <label>Паспорт, В/ц:</label>
-                            <ValidationMessage For="@(() => ResearchData.PassportVc)" />
-                            <InputNumber class="form-control" @bind-Value="ResearchData.PassportVc" />
+                            <label>Поверхность:</label>
+                            <ValidationMessage For="@(() => ResearchData.Surface)" />
+                            <InputNumber class="form-control" @bind-Value="ResearchData.Surface" />
                         </div>
                         <div>
-                            <label>Паспорт, н/сх:</label>
-                            <ValidationMessage For="@(() => ResearchData.PassportNsh)" />
-                            <InputNumber class="form-control" @bind-Value="ResearchData.PassportNsh" />
+                            <label>Сито 0.2:</label>
+                            <ValidationMessage For="@(() => ResearchData.Sieve0_8)" />
+                            <InputNumber class="form-control" @bind-Value="ResearchData.Sieve0_8" />
                         </div>
                         <div>
-                            <label>Паспорт, к/сх:</label>
-                            <ValidationMessage For="@(() => ResearchData.PassportKsh)" />
-                            <InputNumber class="form-control" @bind-Value="ResearchData.PassportKsh" />
+                            <label>Сито 0.09:</label>
+                            <ValidationMessage For="@(() => ResearchData.Sieve0_09)" />
+                            <InputNumber class="form-control" @bind-Value="ResearchData.Sieve0_09" />
                         </div>
                         <div>
-                            <label>Фактическое в/ц:</label>
-                            <ValidationMessage For="@(() => ResearchData.ActualVc)" />
-                            <InputNumber class="form-control" @bind-Value="ResearchData.ActualVc" />
+                            <label>Сито 0.045:</label>
+                            <ValidationMessage For="@(() => ResearchData.Sieve0_045)" />
+                            <InputNumber class="form-control" @bind-Value="ResearchData.Sieve0_045" />
                         </div>
                         <div>
-                            <label>Фактическое н/сх:</label>
-                            <ValidationMessage For="@(() => ResearchData.ActualNsh)" />
-                            <InputNumber class="form-control" @bind-Value="ResearchData.ActualNsh" />
+                            <label>Содержание гипса:</label>
+                            <ValidationMessage For="@(() => ResearchData.Gypsum)" />
+                            <InputNumber class="form-control" @bind-Value="ResearchData.Gypsum" />
                         </div>
                         <div>
-                            <label>Фактическое к/сх:</label>
-                            <ValidationMessage For="@(() => ResearchData.ActualKsh)" />
-                            <InputNumber class="form-control" @bind-Value="ResearchData.ActualKsh" />
-                        </div>
-                        <div>
-                            <label>Откуда привезли:</label>
-                            <ValidationMessage For="@(() => ResearchData.FromName)" />
-                            <InputText class="form-control" @bind-Value="ResearchData.FromName" />
+                            <label>Влажность:</label>
+                            <ValidationMessage For="@(() => ResearchData.Humidity)" />
+                            <InputNumber class="form-control" @bind-Value="ResearchData.Humidity" />
                         </div>
                     </div>
 
@@ -186,7 +181,7 @@
     public int Id { get; set; }
     public bool IsModeCreate => Id == 0;
 
-    public CementResearch? ResearchData { get; set; }
+    public MudResearch? ResearchData { get; set; }
     public IDictionary<int, string> ResearchObjects { get; set; } = new Dictionary<int, string>();
     public IDictionary<int, string> WorkShifts { get; set; } = new Dictionary<int, string>();
     public IDictionary<int, string> Assistans { get; set; } = new Dictionary<int, string>();
@@ -195,14 +190,14 @@
     {
         if (IsModeCreate)
         {
-            ResearchData = new CementResearch
+            ResearchData = new MudResearch
             {
                 DateTime = DateTime.Now.AddSeconds(-DateTime.Now.Second),
-                TypeResearchId = (await _Context.TypeResearches.FirstAsync(tr => tr.Name == Names.CementName)).Id,
+                TypeResearchId = (await _Context.TypeResearches.FirstAsync(tr => tr.Name == Names.MudName)).Id,
             };
         }
         else
-            ResearchData = await _Context.CementResearches.FindAsync(Id);
+            ResearchData = await _Context.MudResearches.FindAsync(Id);
         ResearchObjects = await _Context.ResearchObjects.ToDictionaryAsync(r => r.Id, r => r.Name);
         WorkShifts = await _Context.WorkShifts.ToDictionaryAsync(w => w.Id, w => w.Name);
         Assistans = await _Context.LabAssistants
@@ -214,14 +209,13 @@
     {
         if (IsModeCreate)
         {
-            _Context.CementResearches.Add(ResearchData!);
+            _Context.MudResearches.Add(ResearchData!);
         }
         await _Context.SaveChangesAsync();
-        NavManager.NavigateTo("edit/cement");
+        NavManager.NavigateTo("edit/mud");
     }
 
     public string Mode => IsModeCreate ? "Добавление нового исследования" : "Редактирование данных исследования";
     public string Theme => IsModeCreate ? "success" : "info";
     public string TextColor => IsModeCreate ? "white" : "dark";
 }
-
