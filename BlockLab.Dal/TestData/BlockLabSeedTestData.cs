@@ -8,7 +8,7 @@ public static class BlockLabSeedTestData
     /// <param name="serviceProvider">Провайдер</param>
     /// <param name="configuration">Корфигурация</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public static async void SeedTestData(IServiceProvider serviceProvider, IConfiguration configuration)
+    public static async Task SeedTestData(IServiceProvider serviceProvider, IConfiguration configuration)
     {
         serviceProvider = serviceProvider.CreateScope().ServiceProvider;
         using (var context = new BlockLabContext(serviceProvider.GetRequiredService<DbContextOptions<BlockLabContext>>()))

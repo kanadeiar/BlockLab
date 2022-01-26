@@ -12,6 +12,8 @@ global using Microsoft.AspNetCore.Razor.TagHelpers;
 global using Microsoft.AspNetCore.Mvc.Routing;
 global using Microsoft.AspNetCore.Mvc.Rendering;
 global using Microsoft.AspNetCore.Mvc.ViewFeatures;
+global using Microsoft.AspNetCore.Authentication.Cookies;
+global using Microsoft.AspNetCore.Identity;
 global using BlockLab.Dal.Data;
 global using BlockLab.Dal.TestData;
 global using BlockLab.Services;
@@ -19,5 +21,7 @@ global using BlockLab.Domain.Entites;
 global using BlockLab.WebModels;
 global using BlockLab.Interfaces.Services;
 global using BlockLab.Domain.Models;
+global using BlockLab.Domain.Identity;
+
 
 
