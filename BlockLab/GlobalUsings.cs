@@ -22,6 +22,7 @@ global using BlockLab.WebModels;
 global using BlockLab.Interfaces.Services;
 global using BlockLab.Domain.Models;
 global using BlockLab.Domain.Identity;
-
+global using Microsoft.AspNetCore.Authorization;
+global using BlockLab.Domain.Common;
 
 

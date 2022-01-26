@@ -19,19 +19,21 @@
 </head>
 
 <body>
-<partial name="Partial/_HeaderPartial" />
+    <partial name="Partial/_HeaderPartial" />
 
-<main role="main" class="pb-4">
-    @RenderBody()
-</main>
+    <main role="main" class="pb-4">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
 
-<partial name="Partial/_FooterPartial" />
+    <partial name="Partial/_FooterPartial" />
 
-<partial name="Partial/_ScriptsPartial" />
+    <partial name="Partial/_ScriptsPartial" />
 
-@await RenderSectionAsync("Scripts", false)
+    @await RenderSectionAsync("Scripts", false)
 
-@*<script src="_framework/blazor.server.js"></script>*@
+    @*<script src="_framework/blazor.server.js"></script>*@
 </body>
 
 </html>

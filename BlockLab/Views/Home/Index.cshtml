@@ -4,62 +4,61 @@
     ViewBag.Title = "Главная";
 }
 
-<div class="container">
-    <partial name="Partial/SliderPartial" />
-    <div class="row">
-        <div class="col-sm-3 mb-2">
-            <partial name="Partial/_LeftSidebarPartial" />
-        </div>
-        <div class="col-sm-9 mb-2">
-            <div class="border-1 bg-light shadow rounded-1 p-2">
-                <h1>@ViewBag.Title</h1>
+<partial name="Partial/SliderPartial" />
+<div class="row">
+    <div class="col-sm-3 mb-2">
+        <partial name="Partial/_LeftSidebarPartial" />
+    </div>
+    <div class="col-sm-9 mb-2">
+        <div class="border-1 bg-light shadow rounded-1 p-2">
+            <h1>@ViewBag.Title</h1>
 
-                <p>Главная страница лабораторного приложения.</p>
-                
-                <p>Результаты последних 10 исследований:</p>
+            <p>Главная страница лабораторного приложения.</p>
 
-                <ul class="list-group">
-                    @if (Model is null)
+            <p>Результаты последних 10 исследований:</p>
+
+            <ul class="list-group">
+                @if (Model is null)
+                {
+                    <li class="list-group-item">Результаты Отсутствуют</li>
+                }
+                else
+                {
+                    var i = 1;
+                    @foreach (var m in Model)
                     {
-                        <li class="list-group-item">Результаты Отсутствуют</li>
+                        <li class="list-group-item @(m.IsNormal?"":"bg-danger bg-opacity-25")">
+                            <span>@(i++) Дата и время: <strong>@m.DateTime.ToString("dd.MM.yyyy г.", new CultureInfo("ru-RU")) @m.DateTime.ToString("HH:mm")</strong></span>
+                            <span><strong>@m.Name</strong></span>
+                            <span>Вид: <strong>@m.TypeResearchName</strong></span>
+                            <span>Результат: <strong>@((m.Value != 0.0) ? m.Value.ToString("F1") : "") @m.Text</strong></span>
+                            <span>Норма: <strong>@((m.IsNormal) ? "Да" : "Нет")</strong></span>
+                            @if (m is BlockQualityResearchWebModel q)
+                            {
+                                <span>Формат: <strong>@q.Format</strong> Марка: <strong>@q.Trademark</strong></span>
+                            }
+                            else if (m is CementResearchWebModel c)
+                            {
+                                <span>Откуда цемент: <strong>@c.FromName</strong></span>
+                            }
+                            else if (m is HammerBinderResearchWebModel h)
+                            {
+                                <span>Активность: <strong>@h.Activiry</strong>%</span>
+                            }
+                            else if (m is MudResearchWebModel mu)
+                            {
+                                <span>Плотность: <strong>@mu.Density</strong> кг/см2</span>
+                            }
+                            <span>@m.Note</span>
+                            <span>Лаборант: <strong>@m.LabAssistantSurFP</strong></span>
+                            <a asp-action="Info" asp-controller="Research" asp-route-id="@m.Id" class="btn btn-sm btn-info">
+                                Инфо
+                            </a>
+                        </li>
                     }
-                    else
-                    {
-                        var i = 1;
-                        @foreach (var m in Model)
-                        {
-                            <li class="list-group-item @(m.IsNormal?"":"bg-danger bg-opacity-25")">
-                                <span>@(i++) Дата и время: <strong>@m.DateTime.ToString("dd.MM.yyyy г.", new CultureInfo("ru-RU")) @m.DateTime.ToString("HH:mm")</strong></span>
-                                <span><strong>@m.Name</strong></span>
-                                <span>Вид: <strong>@m.TypeResearchName</strong></span>
-                                <span>Результат: <strong>@((m.Value != 0.0) ? m.Value.ToString("F1") : "") @m.Text</strong></span>
-                                <span>Норма: <strong>@((m.IsNormal) ? "Да" : "Нет")</strong></span>
-                                @if (m is BlockQualityResearchWebModel q)
-                                {
-                                    <span>Формат: <strong>@q.Format</strong> Марка: <strong>@q.Trademark</strong></span>
-                                }
-                                else if (m is CementResearchWebModel c)
-                                {
-                                    <span>Откуда цемент: <strong>@c.FromName</strong></span>
-                                }
-                                else if (m is HammerBinderResearchWebModel h)
-                                {
-                                    <span>Активность: <strong>@h.Activiry</strong>%</span>
-                                }
-                                else if (m is MudResearchWebModel mu)
-                                {
-                                    <span>Плотность: <strong>@mu.Density</strong> кг/см2</span>
-                                }
-                                <span>@m.Note</span>
-                                <span>Лаборант: <strong>@m.LabAssistantSurFP</strong></span>
-                                <a asp-action="Info" asp-controller="Research" asp-route-id="@m.Id" class="btn btn-sm btn-info">
-                                    Инфо
-                                </a>
-                            </li>
-                        }
-                    }
-                </ul>
-            </div>
+                }
+            </ul>
         </div>
     </div>
 </div>
+

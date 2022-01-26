@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 <header class="sticky-top">
-    <nav class="navbar navbar-expand-md navbar-toggleable-md navbar-dark bg-success border-bottom mb-4">
+    <nav class="navbar navbar-expand-lg navbar-toggleable-lg navbar-dark bg-success border-bottom mb-4">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img src="favicon.png" alt="Бренд" width="30" height="30" class="d-inline-block align-text-top">
@@ -15,6 +15,11 @@
                 <_MainMenuPartial/>
 
                 <div class="d-flex">
+                    <AuthorizeView>
+                        <a href="/account" class="btn btn-primary me-1">
+                            <i class="fa fa-user"></i> @context.User.Identity?.Name
+                        </a>
+                    </AuthorizeView>
                     <a class="btn btn-info me-1" href="/">
                         <i class="fa fa-arrow-left"></i>
                         Назад
