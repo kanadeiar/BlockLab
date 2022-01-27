@@ -33,7 +33,7 @@ public class RoleController : Controller
     }
 
     /// <summary> Создание новой роли </summary>
-    public async Task<IActionResult> Create()
+    public IActionResult Create()
     {
         return View("Edit", new RoleEditWebModel());
     }
@@ -60,7 +60,7 @@ public class RoleController : Controller
 
     /// <summary> Редактирование роли </summary>
     /// <param name="model">Модель роли</param>
-    [HttpPost]
+    [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(RoleEditWebModel model)
     {
         if (model is null)
