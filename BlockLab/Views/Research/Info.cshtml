@@ -3,184 +3,183 @@
     ViewBag.Title = "Результаты одного исследования";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-3 mb-2">
-            <partial name="Partial/_LeftSidebarPartial" />
-        </div>
-        <div class="col-sm-9 mb-2">
-            <div class="border-1 bg-light shadow rounded-1 p-2">
-                <h1>@ViewBag.Title</h1>
+<div class="row">
+    <div class="col-sm-3 mb-2">
+        <partial name="Partial/_LeftSidebarPartial" />
+    </div>
+    <div class="col-sm-9 mb-2">
+        <div class="border-1 bg-light shadow rounded-1 p-2">
+            <h1>@ViewBag.Title</h1>
 
-                <p>Результаты одного лабораторного исследования:</p>
-                
-                <div class="row">
-                    <div class="col-md-8">
-                        <div>
-                            <span>Дата: <strong>@Model.DateTime.ToString("dd.MM.yyyy")</strong></span>
-                            <span>Время: <strong>@Model.DateTime.ToString("HH:mm")</strong></span>
-                        </div>
-                        <div>
-                            <span>Название: <strong>@Model.Name</strong></span>
-                        </div>
-                        <div class="mt-2">
-                            <span>Вид исследования: <strong>@Model.TypeResearchName</strong></span>
-                        </div>
-                        <div>
-                            <span>Объект исследования: <strong>@Model.ResearchObjectName</strong></span>
-                        </div>
-                        <div class="mt-2">
-                            <span>Результаты исследования:</span>
-                        </div>
-                        <div>
-                            <span>Значение: <strong>@Model.Value.ToString("F1")</strong></span>
-                        </div>
-                        <div>
-                            <span>Текст: <strong>@Model.Text</strong></span>
-                        </div>
-                        <div class="mt-2">
-                            <span>Нормальность:</span>
-                            @if (@Model.IsNormal)
-                            {
-                                <strong class="text-success">Нормальный результат</strong>
-                            }
-                            else
-                            {
-                                <strong class="text-danger">Плохой результат</strong>
-                            }
-                        </div>
-                        <div>
-                            <span>Примечание: @Model.Note</span>
-                        </div>
+            <p>Результаты одного лабораторного исследования:</p>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div>
+                        <span>Дата: <strong>@Model.DateTime.ToString("dd.MM.yyyy")</strong></span>
+                        <span>Время: <strong>@Model.DateTime.ToString("HH:mm")</strong></span>
+                    </div>
+                    <div>
+                        <span>Название: <strong>@Model.Name</strong></span>
+                    </div>
+                    <div class="mt-2">
+                        <span>Вид исследования: <strong>@Model.TypeResearchName</strong></span>
+                    </div>
+                    <div>
+                        <span>Объект исследования: <strong>@Model.ResearchObjectName</strong></span>
+                    </div>
+                    <div class="mt-2">
+                        <span>Результаты исследования:</span>
+                    </div>
+                    <div>
+                        <span>Значение: <strong>@Model.Value.ToString("F1")</strong></span>
+                    </div>
+                    <div>
+                        <span>Текст: <strong>@Model.Text</strong></span>
+                    </div>
+                    <div class="mt-2">
+                        <span>Нормальность:</span>
+                        @if (@Model.IsNormal)
+                        {
+                            <strong class="text-success">Нормальный результат</strong>
+                        }
+                        else
+                        {
+                            <strong class="text-danger">Плохой результат</strong>
+                        }
+                    </div>
+                    <div>
+                        <span>Примечание: @Model.Note</span>
                     </div>
                 </div>
+            </div>
 
-                <hr />
-                
-                @if (Model is BlockQualityResearchWebModel q)
-                {
-                    <div class="row">
-                        <div class="col-md-6">
-                            <span>Формат: <strong>@q.Format</strong></span>
-                            <span>Марка: <strong>@q.Trademark</strong></span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Вес: <strong>@q.Weight.ToString("F1")</strong> г.</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Геометрические размеры:</span>
-                            <span>Длинна: <strong>@q.SizeX</strong> см.</span>
-                            <span>Ширина: <strong>@q.SizeY</strong> см.</span>
-                            <span>Высота: <strong>@q.SizeZ</strong> см.</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Плотность образца в сыром виде: <strong>@q.RawDensity.ToString("F1")</strong> кг/м3</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Коэффициент: <strong>@q.Coefficient</strong></span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Масса навески до высушивания: <strong>@q.RawWeight</strong> г.</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Масса навески(сушеная): <strong>@q.DriedWeight</strong> г.</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Влажность: <strong>@q.Humidity</strong> W%</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Назрузка: <strong>@q.Load</strong> г.</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Прочность: <strong>@q.Strength</strong> %</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Плотность в сухом виде: <strong>@q.DriedDensity</strong> кг/см3</span>
-                        </div>
-                    </div>
-                    <hr/>
-                } 
-                else if (Model is CementResearchWebModel c)
-                {
-                    <div class="row">
-                        <div class="col-12">
-                            <span>Номер партии цемента: <strong>@c.Party</strong></span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Данные по паспорту:</span>
-                            <span>В/ц: <strong>@c.PassportVc.ToString("F2")</strong></span>
-                            <span>Н/сх: <strong>@c.PassportNsh.ToString("F0")</strong></span>
-                            <span>к/сх: <strong>@c.PassportKsh.ToString("F0")</strong></span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Данные по факту:</span>
-                            <span>В/ц: <strong>@c.ActualVc.ToString("F2")</strong></span>
-                            <span>Н/сх: <strong>@c.ActualNsh.ToString("F0")</strong></span>
-                            <span>к/сх: <strong>@c.ActualKsh.ToString("F0")</strong></span>
-                        </div>
-                        <div>
-                            <span>Отуда привезли: <strong>@c.FromName</strong></span>
-                        </div>
-                    </div>
-                    <hr/>
-                }
-                else if (Model is HammerBinderResearchWebModel h)
-                {
-                    <div class="row">
-                        <div class="col-md-6">
-                            <span>Остаток на сите 0.2: <strong>@h.Sieve0_2.ToString("F0")</strong></span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Удельная поверхность 0.08: <strong>@h.Sufrace.ToString("F2")</strong> </span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Производительность мельниц: <strong>@h.Perfomance.ToString("F1")</strong></span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Активность молото-вяжущего: <strong>@h.Activiry.ToString("F1")</strong></span>
-                        </div>
-                    </div>
-                    <hr/>
-                }
-                else if (Model is MudResearchWebModel m)
-                {
-                    <div class="row">
-                        <div class="col-md-6">
-                            <span>Плотность шлама: <strong>@m.Density.ToString("F2")</strong> кг/см3</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Удельная поверхность: <strong>@m.Surface.ToString("F0")</strong></span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Сито 0.8: <strong>@m.Sieve0_8.ToString("F1")</strong></span>
-                            <span>Сито 0.09: <strong>@m.Sieve0_09.ToString("F1")</strong></span>
-                            <span>Сито 0.045: <strong>@m.Sieve0_045.ToString("F1")</strong></span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Гипс: <strong>@m.Gypsum.ToString("F1")</strong> г.</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span>Влажность: <strong>@m.Humidity.ToString("F2")</strong> %</span>
-                        </div>
-                    </div>
-                    <hr/>
-                }
+            <hr />
 
+            @if (Model is BlockQualityResearchWebModel q)
+            {
                 <div class="row">
-                    <div class="col">
-                        <div>
-                            <span>Лаборант: </span>
-                        </div>
-                        <div>
-                            <span>Фамилия, имя, отчество: <strong>@Model.AssistantSurName @Model.AssistantFirstName @Model.AssistantPatronymic</strong></span>
-                            <span>День рождения: <strong>@Model.AssistantBirthday.ToString("dd.MM.yyyy г.")</strong></span>
-                        </div>
-                        <div>
-                            <span>Рабочая смена: <strong>@Model.WorkShiftName</strong></span>
-                        </div>
+                    <div class="col-md-6">
+                        <span>Формат: <strong>@q.Format</strong></span>
+                        <span>Марка: <strong>@q.Trademark</strong></span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Вес: <strong>@q.Weight.ToString("F1")</strong> г.</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Геометрические размеры:</span>
+                        <span>Длинна: <strong>@q.SizeX</strong> см.</span>
+                        <span>Ширина: <strong>@q.SizeY</strong> см.</span>
+                        <span>Высота: <strong>@q.SizeZ</strong> см.</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Плотность образца в сыром виде: <strong>@q.RawDensity.ToString("F1")</strong> кг/м3</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Коэффициент: <strong>@q.Coefficient</strong></span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Масса навески до высушивания: <strong>@q.RawWeight</strong> г.</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Масса навески(сушеная): <strong>@q.DriedWeight</strong> г.</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Влажность: <strong>@q.Humidity</strong> W%</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Назрузка: <strong>@q.Load</strong> г.</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Прочность: <strong>@q.Strength</strong> %</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Плотность в сухом виде: <strong>@q.DriedDensity</strong> кг/см3</span>
+                    </div>
+                </div>
+                <hr />
+            }
+            else if (Model is CementResearchWebModel c)
+            {
+                <div class="row">
+                    <div class="col-12">
+                        <span>Номер партии цемента: <strong>@c.Party</strong></span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Данные по паспорту:</span>
+                        <span>В/ц: <strong>@c.PassportVc.ToString("F2")</strong></span>
+                        <span>Н/сх: <strong>@c.PassportNsh.ToString("F0")</strong></span>
+                        <span>к/сх: <strong>@c.PassportKsh.ToString("F0")</strong></span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Данные по факту:</span>
+                        <span>В/ц: <strong>@c.ActualVc.ToString("F2")</strong></span>
+                        <span>Н/сх: <strong>@c.ActualNsh.ToString("F0")</strong></span>
+                        <span>к/сх: <strong>@c.ActualKsh.ToString("F0")</strong></span>
+                    </div>
+                    <div>
+                        <span>Отуда привезли: <strong>@c.FromName</strong></span>
+                    </div>
+                </div>
+                <hr />
+            }
+            else if (Model is HammerBinderResearchWebModel h)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <span>Остаток на сите 0.2: <strong>@h.Sieve0_2.ToString("F0")</strong></span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Удельная поверхность 0.08: <strong>@h.Sufrace.ToString("F2")</strong> </span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Производительность мельниц: <strong>@h.Perfomance.ToString("F1")</strong></span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Активность молото-вяжущего: <strong>@h.Activiry.ToString("F1")</strong></span>
+                    </div>
+                </div>
+                <hr />
+            }
+            else if (Model is MudResearchWebModel m)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <span>Плотность шлама: <strong>@m.Density.ToString("F2")</strong> кг/см3</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Удельная поверхность: <strong>@m.Surface.ToString("F0")</strong></span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Сито 0.8: <strong>@m.Sieve0_8.ToString("F1")</strong></span>
+                        <span>Сито 0.09: <strong>@m.Sieve0_09.ToString("F1")</strong></span>
+                        <span>Сито 0.045: <strong>@m.Sieve0_045.ToString("F1")</strong></span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Гипс: <strong>@m.Gypsum.ToString("F1")</strong> г.</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span>Влажность: <strong>@m.Humidity.ToString("F2")</strong> %</span>
+                    </div>
+                </div>
+                <hr />
+            }
+
+            <div class="row">
+                <div class="col">
+                    <div>
+                        <span>Лаборант: </span>
+                    </div>
+                    <div>
+                        <span>Фамилия, имя, отчество: <strong>@Model.AssistantSurName @Model.AssistantFirstName @Model.AssistantPatronymic</strong></span>
+                        <span>День рождения: <strong>@Model.AssistantBirthday.ToString("dd.MM.yyyy г.")</strong></span>
+                    </div>
+                    <div>
+                        <span>Рабочая смена: <strong>@Model.WorkShiftName</strong></span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+

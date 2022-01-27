@@ -3,9 +3,11 @@
 public class ResearchInfoPagiService : IResearchInfoPagiService
 {
     private readonly BlockLabContext _context;
-    public ResearchInfoPagiService(BlockLabContext context)
+    private readonly UserManager<User> _userManager;
+    public ResearchInfoPagiService(BlockLabContext context, UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     public async Task<ResearchPagiWebModel> GetPagiFilterSortResearches(ResearchFilter filter)
@@ -13,7 +15,6 @@ public class ResearchInfoPagiService : IResearchInfoPagiService
         IQueryable<Research> query = _context.Researches
             .Include(r => r.TypeResearch)
             .Include(r => r.ResearchObject)
-            .Include(r => r.LabAssistant)
             .Include(r => r.WorkShift)
             .Where(r => !r.IsDelete);
         if (filter?.Name is { } name)
@@ -36,8 +37,8 @@ public class ResearchInfoPagiService : IResearchInfoPagiService
             ResearchSortState.ValueDesc => query.OrderByDescending(q => q.Value),
             ResearchSortState.NormalAsc => query.OrderBy(q => q.IsNormal),
             ResearchSortState.NormalDesc => query.OrderByDescending(q => q.IsNormal),
-            ResearchSortState.AssistantAsc => query.OrderBy(q => q.LabAssistant),
-            ResearchSortState.AssistantDesc => query.OrderByDescending(q => q.LabAssistant),
+            ResearchSortState.AssistantAsc => query.OrderBy(q => q.UserId),
+            ResearchSortState.AssistantDesc => query.OrderByDescending(q => q.UserId),
             _ => query.OrderByDescending(q => q.DateTime),
         };
         var count = await query.CountAsync();
@@ -58,9 +59,14 @@ public class ResearchInfoPagiService : IResearchInfoPagiService
             Note = r.Note,
             TypeResearchName = r.TypeResearch.Name,
             ResearchObjectName = r.ResearchObject.Name,
-            LabAssistantSurFP = $"{r.LabAssistant.SurName} {r.LabAssistant.FirstName[0]}.{r.LabAssistant.Patronymmic[0]}.",
+            LabAssistantSurFP = r.UserId,
             WorkShiftName = r.WorkShift.Name,
         }).ToArrayAsync();
+        foreach (var item in models)
+        {
+            var user = await _userManager.FindByIdAsync(item.LabAssistantSurFP);
+            item.LabAssistantSurFP = $"{user.SurName} {user.FirstName[0]}.{user.Patronymic[0]}.";
+        };
         return new ResearchPagiWebModel
         {
             Researches = models,

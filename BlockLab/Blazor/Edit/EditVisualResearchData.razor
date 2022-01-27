@@ -1,6 +1,7 @@
 ﻿@page "/edit/visual"
 @page "/edit/visual/{istrash:bool}"
 @inherits OwningComponentBase<BlockLabContext>
+@inject UserManager<User> userManager
 
 <PageTitle>@Mode - Лаборатория</PageTitle>
 
@@ -61,7 +62,7 @@
                                                 <strong class="text-danger">Плохо</strong>
                                             }
                                         </td>
-                                        <td>@e.LabAssistant?.SurName @e.LabAssistant?.FirstName[0].@e.LabAssistant?.Patronymmic[0].</td>
+                                        <td><strong>@(userManager.FindByIdAsync(@e.UserId).Result.SurName)</strong></td>
                                         <td>@e.WorkShift.Name</td>
                                         <td class="text-center">
                                             @if (!IsTrash)
@@ -132,7 +133,6 @@
     public bool IsTrash { get; set; }
     private IQueryable<Research> _Query => _Context.Researches
         .Include(q => q.ResearchObject)
-        .Include(q => q.LabAssistant)
         .Include(q => q.WorkShift)
         .Where(q => q.TypeResearch.Name == Names.VisualName && q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(- DateTime.Today.Day))
         .OrderByDescending(q => q.DateTime);

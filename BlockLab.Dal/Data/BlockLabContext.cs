@@ -1,10 +1,10 @@
-﻿namespace BlockLab.Dal.Data;
+﻿// dotnet ef --startup-project ../BlockLab/ migrations add init --context BlockLabContext
+
+namespace BlockLab.Dal.Data;
 
 /// <summary> Лабораторная база данных </summary>
 public class BlockLabContext : DbContext
 {
-    /// <summary> Лаборанты </summary>
-    public DbSet<LabAssistant> LabAssistants { get; set; }
     /// <summary> Объекты исследований </summary>
     public DbSet<ResearchObject> ResearchObjects { get; set; }
     /// <summary> Виды исследований </summary>

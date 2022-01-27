@@ -17,43 +17,6 @@ namespace BlockLab.Dal.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.1");
 
-            modelBuilder.Entity("BlockLab.Domain.Entites.LabAssistant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsInactive")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Patronymmic")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("SurName")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("TEXT");
-
-                    b.Property<byte[]>("Timestamp")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("BLOB");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LabAssistants");
-                });
-
             modelBuilder.Entity("BlockLab.Domain.Entites.Research", b =>
                 {
                     b.Property<int>("Id")
@@ -67,9 +30,6 @@ namespace BlockLab.Dal.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsNormal")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("LabAssistantId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -97,6 +57,9 @@ namespace BlockLab.Dal.Migrations
                     b.Property<int>("TypeResearchId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<double>("Value")
                         .HasColumnType("REAL");
 
@@ -104,8 +67,6 @@ namespace BlockLab.Dal.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LabAssistantId");
 
                     b.HasIndex("ResearchObjectId");
 
@@ -328,12 +289,6 @@ namespace BlockLab.Dal.Migrations
 
             modelBuilder.Entity("BlockLab.Domain.Entites.Research", b =>
                 {
-                    b.HasOne("BlockLab.Domain.Entites.LabAssistant", "LabAssistant")
-                        .WithMany("Researches")
-                        .HasForeignKey("LabAssistantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BlockLab.Domain.Entites.ResearchObject", "ResearchObject")
                         .WithMany("Researches")
                         .HasForeignKey("ResearchObjectId")
@@ -351,8 +306,6 @@ namespace BlockLab.Dal.Migrations
                         .HasForeignKey("WorkShiftId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("LabAssistant");
 
                     b.Navigation("ResearchObject");
 
@@ -395,11 +348,6 @@ namespace BlockLab.Dal.Migrations
                         .HasForeignKey("BlockLab.Domain.Entites.MudResearch", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BlockLab.Domain.Entites.LabAssistant", b =>
-                {
-                    b.Navigation("Researches");
                 });
 
             modelBuilder.Entity("BlockLab.Domain.Entites.ResearchObject", b =>

@@ -11,9 +11,13 @@
             Ввод данных
         </NavLink>
     </li>
-    <li class="nav-item">
-        <NavLink class="nav-link" href="edit">
-            Редактирование данных
-        </NavLink>
-    </li>
+    <AuthorizeView Roles="admins">
+        <Authorized>
+            <li class="nav-item">
+                <NavLink class="nav-link" href="edit">
+                    Редактирование данных
+                </NavLink>
+            </li>
+        </Authorized>
+    </AuthorizeView>
 </ul>
