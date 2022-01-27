@@ -17,7 +17,6 @@ public class AccountController : Controller
         _context = context;
     }
 
-    [AllowAnonymous]
     public async Task<IActionResult> Index()
     {
         var model = new IndexWebModel();
@@ -82,6 +81,52 @@ public class AccountController : Controller
             return LocalRedirect(model.ReturnUrl ?? "/");
         }
         ModelState.AddModelError("", "Ошибка в имени пользователя, либо в пароле при входе в систему");
+        return View();
+    }
+
+    public async Task<IActionResult> Edit()
+    {
+        var username = User.Identity!.Name;
+        if (await _userManager.FindByNameAsync(username) is User user)
+        {
+            var model = new EditWebModel
+            {
+                SurName = user.SurName,
+                FirstName = user.FirstName,
+                Patronymic = user.Patronymic,
+                Email = user.Email,
+                Birthday = user.Birthday,
+            };
+            return View(model);
+        }
+        return NotFound();
+    }
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(EditWebModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        var username = User.Identity!.Name;
+        if (await _userManager.FindByNameAsync(username) is User user)
+        {
+            user.SurName = model.SurName;
+            user.FirstName = model.FirstName;
+            user.Patronymic = model.Patronymic;
+            user.Email = model.Email;
+            user.Birthday = model.Birthday;
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Account");
+            }
+            var errors = result.Errors.Select(e => IdentityErrorCodes.GetDescription(e.Code)).ToArray();
+            foreach (var error in errors)
+            {
+                ModelState.AddModelError("", error);
+            }
+        }
         return View();
     }
 
@@ -177,6 +222,33 @@ public class AccountController : Controller
 
         [HiddenInput(DisplayValue = false)]
         public string? ReturnUrl { get; set; }
+    }
+    /// <summary> Веб модель редактирования своих сведений </summary>
+    public class EditWebModel
+    {
+        [Required(ErrorMessage = "Фамилия обязательна для пользователя")]
+        [StringLength(200, MinimumLength = 3, ErrorMessage = "Фамилия должна быть длинной от 3 до 200 символов")]
+        [Display(Name = "Фамилия пользователя")]
+        public string SurName { get; set; }
+
+        [Required(ErrorMessage = "Имя обязательно для пользователя")]
+        [StringLength(200, MinimumLength = 3, ErrorMessage = "Имя должно быть длинной от 3 до 200 символов")]
+        [Display(Name = "Имя пользователя")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Отчество обязательно для пользователя")]
+        [StringLength(200, MinimumLength = 3, ErrorMessage = "Отчество должно быть длинной от 3 до 200 символов")]
+        [Display(Name = "Отчество пользователя")]
+        public string Patronymic { get; set; }
+
+        [Required(ErrorMessage = "Нужно обязательно ввести свой адрес электронной почты")]
+        [EmailAddress(ErrorMessage = "Нужно ввести корректный адрес своей электронной почты")]
+        [Display(Name = "Адрес электронной почты E-mail")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Дата рождения обязательна для ввода")]
+        [Display(Name = "День рождения пользователя")]
+        public DateTime Birthday { get; set; } = DateTime.Today.AddYears(-18);
     }
 }
 
