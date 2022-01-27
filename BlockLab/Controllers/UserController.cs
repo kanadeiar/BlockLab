@@ -39,7 +39,12 @@ public class UserController : Controller
     /// <summary> Создание нового пользователя </summary>
     public IActionResult Create()
     {
-        return View("Edit", new UserEditWebModel());
+        var allRoles = _roleManager.Roles.ToList();
+        var model = new UserEditWebModel
+        {
+            AllRoles = allRoles,
+        };
+        return View("Edit", model);
     }
 
     /// <summary> Редактирование пользователя </summary>
@@ -52,6 +57,8 @@ public class UserController : Controller
         }
         if (await _userManager.FindByIdAsync(id) is { } user)
         {
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var allRoles = _roleManager.Roles.ToList();
             var model = new UserEditWebModel
             {
                 Id = user.Id,
@@ -61,16 +68,19 @@ public class UserController : Controller
                 UserName = user.UserName,
                 Email = user.Email,
                 Birthday = user.Birthday,
+                UserRoles = userRoles,
+                AllRoles = allRoles,
+                //RolesNames = _userManager.GetRolesAsync(user).Result,
             };
+            //model.RolesNames = model.RolesNames.Select(r => _roleManager.Roles.First(rr => rr.Name == r).Description);
             return View(model);
         }
         return NotFound();
     }
-
     /// <summary> Редактирование пользователя </summary>
     /// <param name="model">Модель пользователя</param>
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(UserEditWebModel model)
+    public async Task<IActionResult> Edit(UserEditWebModel model, List<string> roles)
     {
         if (model is null)
             return BadRequest();
@@ -95,6 +105,7 @@ public class UserController : Controller
                 Birthday = model.Birthday,
             };
             result = await _userManager.CreateAsync(newUser, model.Password);
+            await _userManager.AddToRolesAsync(newUser, roles);
         }
         else
         {
@@ -110,12 +121,58 @@ public class UserController : Controller
                 await _userManager.RemovePasswordAsync(user);
                 result = await _userManager.AddPasswordAsync(user, model.Password);
             }
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var addedRoles = roles.Except(userRoles);
+            var removedRoles = userRoles.Except(roles);
+            await _userManager.AddToRolesAsync(user, addedRoles);
+            await _userManager.RemoveFromRolesAsync(user, removedRoles);
         }
         if (result.Succeeded)
+        {
+
             return RedirectToAction("Index", "User");
+        }
         foreach (var err in result.Errors)
             ModelState.AddModelError("", err.Description);
         return View(model);
+    }
+
+    /// <summary> Удалить пользователя </summary>
+    /// <param name="id">Идентификатор пользователя</param>
+    public async Task<IActionResult> Delete(string id)
+    {
+        if (string.IsNullOrEmpty(id))
+            return BadRequest();
+        var u = await _userManager.FindByIdAsync(id);
+        if (u is null)
+            return NotFound();
+        var model = new UserWebModel
+        {
+            Id = u.Id,
+            SurName = u.SurName,
+            FirstName = u.FirstName,
+            Patronymic = u.Patronymic,
+            UserName = u.UserName,
+            Email = u.Email,
+            BirthDay = u.Birthday,
+            Age = DateTime.Today.Year - u.Birthday.Year,
+            RolesNames = _userManager.GetRolesAsync(u).Result,
+        };
+        model.RolesNames = model.RolesNames.Select(r => _roleManager.Roles.First(rr => rr.Name == r).Description);
+        return View(model);
+    }
+    /// <summary> Подтверждение удаления пользователя </summary>
+    /// <param name="id">Идентификатор пользователя</param>
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(string id)
+    {
+        if (string.IsNullOrEmpty(id))
+            return BadRequest();
+        var user = await _userManager.FindByIdAsync(id);
+        if (user.UserName == "admin")
+            return BadRequest();
+        await _userManager.DeleteAsync(user);
+        return RedirectToAction("Index", "User");
     }
 
     #region WebAPI
@@ -192,6 +249,11 @@ public class UserController : Controller
         [Required(ErrorMessage = "Дата рождения обязательна для ввода")]
         [Display(Name = "День рождения пользователя")]
         public DateTime Birthday { get; set; } = DateTime.Today.AddYears(-18);
+
+        public IEnumerable<Role> AllRoles { get; set; } = Enumerable.Empty<Role>();
+        [Display(Name = "Назначенные роли для пользователя")]
+        public IEnumerable<string> UserRoles { get; set; } = Enumerable.Empty<string>();
+
 
         [Required(ErrorMessage = "Нужно обязательно ввести логин пользователя")]
         [Display(Name = "Логин пользователя")]

@@ -55,12 +55,11 @@
                         </div>
                     }
                     <form asp-controller="Role" asp-action="DeleteConfirmed" asp-antiforgery="true" asp-route-id="@Model.Id">
-                        <input type="submit" value="Подтвердить удаление роли пользователей" class="btn btn-danger mb-1 @((Model.UsersCount != 0 || Model.Name == "admins") ? "disabled" : "")" data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить окончательно роль пользователей" />
+                        <input type="submit" value="Подтвердить удаление роли пользователей" class="btn btn-danger mb-1 @((Model.UsersCount != 0 || Model.Name == "admins") ? "disabled" : "")" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Удалить окончательно роль пользователей" />
                         <a asp-controller="Role" asp-action="Index" class="btn btn-secondary mb-1">Назад</a>
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

@@ -40,14 +40,24 @@
                         <input asp-for="Email" class="form-control" placeholder="Введите электронную почту пользователя" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="my-2">
                         <label asp-for="Birthday" class="form-label"></label>
                         <input asp-for="Birthday" type="date" class="form-control" placeholder="Введите день рождения пользователя" />
                         <span asp-validation-for="Birthday" class="text-danger"></span>
                     </div>
-                    
 
+                    <div class="my-2">
+                        <label asp-for="UserRoles" class="form-label"></label>
+                        <div class="form-group">
+                            @foreach (var role in Model.AllRoles)
+                            {
+                                <input type="checkbox" name="roles" value="@role.Name"
+                                   @(Model.UserRoles.Contains(role.Name) ? "checked=\"checked\"" : "") />
+                                @role.Description <br/>
+                            }
+                        </div>
+                    </div>
 
                     <div class="my-2">
                         <label asp-for="UserName" class="form-label"></label>
@@ -75,5 +85,5 @@
 
 @section Scripts
 {
-    <partial name="Partial/_ValidationScriptsPartial"/>
+<partial name="Partial/_ValidationScriptsPartial" />
 }
