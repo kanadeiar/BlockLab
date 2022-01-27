@@ -1,5 +1,6 @@
 ﻿@page "/online"
 @inherits OwningComponentBase<BlockLabContext>
+@inject UserManager<User> userManager
 
 <PageTitle>Главная - Лаборатория</PageTitle>
 
@@ -49,7 +50,7 @@
                             {
                                 <span>Плотность: <strong>@mu.Density</strong> кг/см2 </span>
                             }
-                            <span>Лаборант: <strong>@r.LabAssistant.SurName @r.LabAssistant.FirstName @r.LabAssistant.Patronymmic</strong></span>
+                            <span>Лаборант: <strong>@(userManager.FindByIdAsync(@r.UserId).Result.SurName)</strong></span>
                         </li>
                     }
 
@@ -73,7 +74,6 @@
 
     private IQueryable<Research> _Query => _Context.Researches
         .Include(r => r.TypeResearch)
-        .Include(r => r.LabAssistant)
         .OrderByDescending(r => r.DateTime)
         .Where(r => !r.IsDelete)
         .Take(10);

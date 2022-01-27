@@ -1,5 +1,6 @@
 ﻿@page "/input/visual"
 @inherits OwningComponentBase<BlockLabContext>
+@inject UserManager<User> userManager
 
 <PageTitle>Визуальный осмотр - Лаборатория</PageTitle>
 
@@ -59,7 +60,7 @@
                                                 <strong class="text-danger">Плохо</strong>
                                             }
                                         </td>
-                                        <td>@e.LabAssistant?.SurName @e.LabAssistant?.FirstName[0].@e.LabAssistant?.Patronymmic[0].</td>
+                                        <td><strong>@(userManager.FindByIdAsync(@e.UserId).Result.SurName)</strong></td>
                                         <td>@e.WorkShift.Name</td>
                                     </tr>
                                 }
@@ -88,7 +89,6 @@
 
     private IQueryable<Research> _Query => _Context.Researches
         .Include(q => q.ResearchObject)
-        .Include(q => q.LabAssistant)
         .Include(q => q.WorkShift)
         .Where(q => q.TypeResearch.Name == Names.VisualName && q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(- DateTime.Today.Day) && !q.IsDelete)
         .OrderByDescending(q => q.DateTime);

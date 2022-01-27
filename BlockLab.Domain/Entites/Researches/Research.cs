@@ -36,11 +36,10 @@ namespace BlockLab.Domain.Entites
         public int ResearchObjectId { get; set; }
         [ForeignKey(nameof(ResearchObjectId))]
         public ResearchObject ResearchObject { get; set; }
-        /// <summary> Лаборант </summary>
-        [Range(1, int.MaxValue, ErrorMessage = "Должен быть выбран лаборант")]
-        public int LabAssistantId { get; set; }
-        [ForeignKey(nameof(LabAssistantId))]
-        public LabAssistant LabAssistant { get; set; }
+
+        /// <summary> Пользователь </summary>
+        public string? UserId { get; set; }
+
         /// <summary> Рабочая смена </summary>
         [Range(1, int.MaxValue, ErrorMessage = "Должена быть выбрана рабочая смена")]
         public int WorkShiftId { get; set; }

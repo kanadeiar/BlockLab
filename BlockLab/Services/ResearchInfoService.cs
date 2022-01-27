@@ -3,9 +3,11 @@
 public class ResearchInfoService : IResearchInfoService
 {
     private readonly BlockLabContext _context;
-    public ResearchInfoService(BlockLabContext context)
+    private readonly UserManager<User> _userManager;
+    public ResearchInfoService(BlockLabContext context, UserManager<User> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     public async Task<IEnumerable<ResearchWebModel>> GetTop10Researches()
@@ -15,7 +17,6 @@ public class ResearchInfoService : IResearchInfoService
                      .OrderByDescending(r => r.DateTime).Take(10)
                      .Include(r => r.TypeResearch)
                      .Include(r => r.ResearchObject)
-                     .Include(r => r.LabAssistant)
                      .Include(r => r.WorkShift)
                      .Where(r => !r.IsDelete)
                      .ToArrayAsync())
@@ -46,7 +47,8 @@ public class ResearchInfoService : IResearchInfoService
             model.Note = r.Note;
             model.TypeResearchName = r.TypeResearch.Name;
             model.ResearchObjectName = r.ResearchObject.Name;
-            model.LabAssistantSurFP = $"{r.LabAssistant.SurName} {r.LabAssistant.FirstName[0]}.{r.LabAssistant.Patronymmic[0]}.";
+            var user = await _userManager.FindByIdAsync(r.UserId);
+            model.LabAssistantSurFP = $"{user.SurName} {user.FirstName[0]}.{user.Patronymic[0]}.";
             model.WorkShiftName = r.WorkShift.Name;
             models.Add(model);
         }
@@ -58,7 +60,6 @@ public class ResearchInfoService : IResearchInfoService
         var r = await _context.Researches
             .Include(r => r.TypeResearch)
             .Include(r => r.ResearchObject)
-            .Include(r => r.LabAssistant)
             .Include(r => r.WorkShift)
             .FirstOrDefaultAsync(r => r.Id == id);
         ResearchWebModel? model = null;
@@ -129,12 +130,12 @@ public class ResearchInfoService : IResearchInfoService
         model.Note = r.Note;
         model.TypeResearchName = r.TypeResearch.Name;
         model.ResearchObjectName = r.ResearchObject.Name;
-        model.LabAssistantSurFP =
-            $"{r.LabAssistant.SurName} {r.LabAssistant.FirstName[0]}.{r.LabAssistant.Patronymmic[0]}.";
-        model.AssistantSurName = r.LabAssistant.SurName;
-        model.AssistantFirstName = r.LabAssistant.FirstName;
-        model.AssistantPatronymic = r.LabAssistant.Patronymmic;
-        model.AssistantBirthday = r.LabAssistant.Birthday;
+        var user = await _userManager.FindByIdAsync(r.UserId);
+        model.LabAssistantSurFP = $"{user.SurName} {user.FirstName[0]}.{user.Patronymic[0]}.";
+        model.AssistantSurName = user.SurName;
+        model.AssistantFirstName = user.FirstName;
+        model.AssistantPatronymic = user.Patronymic;
+        model.AssistantBirthday = user.Birthday;
         model.WorkShiftName = r.WorkShift.Name;
         return model;
     }

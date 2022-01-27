@@ -1,5 +1,6 @@
 ﻿@page "/input/hammerbinder"
 @inherits OwningComponentBase<BlockLabContext>
+@inject UserManager<User> userManager
 
 <PageTitle>Исследование молото-вяжущего - Лаборатория</PageTitle>
 
@@ -61,7 +62,7 @@
                                                 <strong class="text-danger">Плохо</strong>
                                             }
                                         </td>
-                                        <td>@e.LabAssistant?.SurName @e.LabAssistant?.FirstName[0].@e.LabAssistant?.Patronymmic[0].</td>
+                                        <td><strong>@(userManager.FindByIdAsync(@e.UserId).Result.SurName)</strong></td>
                                         <td>@e.WorkShift.Name</td>
                                     </tr>
                                 }
@@ -91,7 +92,6 @@
 
     private IQueryable<HammerBinderResearch> _Query => _Context.HammerBinderResearches
         .Include(q => q.ResearchObject)
-        .Include(q => q.LabAssistant)
         .Include(q => q.WorkShift)
         .Where(q => q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(- DateTime.Today.Day) && !q.IsDelete)
         .OrderByDescending(q => q.DateTime);

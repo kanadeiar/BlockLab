@@ -2,6 +2,7 @@
 @page "/edit/cement/create"
 @inherits OwningComponentBase<BlockLabContext>
 @inject NavigationManager NavManager
+@inject UserManager<User> userManager
 
 <PageTitle>@Mode - Лаборатория</PageTitle>
 
@@ -151,12 +152,12 @@
                         </div>
                         <div>
                             <label>Лаборант</label>
-                            <ValidationMessage For="@(() => ResearchData.LabAssistantId)" />
-                            <InputSelect class="form-select" @bind-Value="ResearchData.LabAssistantId">
+                            <ValidationMessage For="@(() => ResearchData.UserId)" />
+                            <InputSelect class="form-select" @bind-Value="ResearchData.UserId">
                                 <option selected value="null" disabled="disabled">Выберите лаборанта</option>
-                                @foreach (var item in Assistans.Keys)
+                                @foreach (var item in Users.Keys)
                                     {
-                                    <option value="@item">@Assistans[item]</option>
+                                    <option value="@item">@Users[item]</option>
                                     }
                             </InputSelect>
                         </div>
@@ -189,7 +190,7 @@
     public CementResearch? ResearchData { get; set; }
     public IDictionary<int, string> ResearchObjects { get; set; } = new Dictionary<int, string>();
     public IDictionary<int, string> WorkShifts { get; set; } = new Dictionary<int, string>();
-    public IDictionary<int, string> Assistans { get; set; } = new Dictionary<int, string>();
+    public IDictionary<string, string> Users { get; set; } = new Dictionary<string, string>();
 
     protected override async Task OnParametersSetAsync()
     {
@@ -205,9 +206,8 @@
             ResearchData = await _Context.CementResearches.FindAsync(Id);
         ResearchObjects = await _Context.ResearchObjects.ToDictionaryAsync(r => r.Id, r => r.Name);
         WorkShifts = await _Context.WorkShifts.ToDictionaryAsync(w => w.Id, w => w.Name);
-        Assistans = await _Context.LabAssistants
-        .Where(u => !u.IsInactive)
-        .ToDictionaryAsync(u => u.Id, u => $"{u.SurName} {u.FirstName} {u.Patronymmic}");
+        Users = await userManager.Users
+            .ToDictionaryAsync(u => u.Id, u => $"{u.SurName} {u.FirstName} {u.Patronymic}");
     }
 
     public async Task HandleValidSubmit()

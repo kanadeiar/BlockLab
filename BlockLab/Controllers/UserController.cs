@@ -5,12 +5,10 @@ public class UserController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<Role> _roleManager;
-    private readonly SignInManager<User> _signInManager;
-    public UserController(UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager)
+    public UserController(UserManager<User> userManager, RoleManager<Role> roleManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _signInManager = signInManager;
     }
 
     /// <summary> Все пользователи </summary>
@@ -70,9 +68,7 @@ public class UserController : Controller
                 Birthday = user.Birthday,
                 UserRoles = userRoles,
                 AllRoles = allRoles,
-                //RolesNames = _userManager.GetRolesAsync(user).Result,
             };
-            //model.RolesNames = model.RolesNames.Select(r => _roleManager.Roles.First(rr => rr.Name == r).Description);
             return View(model);
         }
         return NotFound();
