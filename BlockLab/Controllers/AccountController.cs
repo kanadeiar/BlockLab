@@ -130,6 +130,38 @@ public class AccountController : Controller
         return View();
     }
 
+    public IActionResult Password()
+    {
+        return View(new PasswordWebModel());
+    }
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Password(PasswordWebModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        var username = User.Identity!.Name;
+        var user = await _userManager.FindByNameAsync(username);
+        var result = await _signInManager.CheckPasswordSignInAsync(user, model.OldPassword, false);
+        if (result.Succeeded)
+        {
+            await _userManager.RemovePasswordAsync(user);
+            var result2 = await _userManager.AddPasswordAsync(user, model.Password);
+            if (result2.Succeeded)
+            {
+                return RedirectToAction("Index", "Account");
+            }
+            var errors = result2.Errors.Select(e => IdentityErrorCodes.GetDescription(e.Code)).ToArray();
+            foreach (var error in errors)
+            {
+                ModelState.AddModelError("", error);
+            }
+        }
+        ModelState.AddModelError("", "Неправильный старый пароль");
+        return View(model);
+    }
+
     public async Task<IActionResult> Logout(string returnUrl)
     {
         await _signInManager.SignOutAsync();
@@ -249,6 +281,25 @@ public class AccountController : Controller
         [Required(ErrorMessage = "Дата рождения обязательна для ввода")]
         [Display(Name = "День рождения пользователя")]
         public DateTime Birthday { get; set; } = DateTime.Today.AddYears(-18);
+    }
+    /// <summary> Веб модель смены пароля </summary>
+    public class PasswordWebModel
+    {
+        [Required(ErrorMessage = "Нужно обязательно ввести свой текущий пароль")]
+        [Display(Name = "Текущий пароль")]
+        [DataType(DataType.Password)]
+        public string OldPassword { get; set; }
+
+        [Required(ErrorMessage = "Нужно обязательно придумать и ввести какой-либо новый пароль")]
+        [Display(Name = "Новый пароль")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Нужно обязательно ввести подтверждение нового пароля")]
+        [Display(Name = "Подтверждение нового пароля")]
+        [DataType(DataType.Password)]
+        [Compare(nameof(Password), ErrorMessage = "Пароли не совпадают")]
+        public string PasswordConfirm { get; set; }
     }
 }
 
