@@ -11,3 +11,8 @@ global using BlockLab.Dal.Data;
 global using Moq;
 global using BlockLab.Domain.Entites;
 global using BlockLab.Domain.Models;
+global using BlockLab.Domain.Identity;
+global using Bunit;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.Extensions.DependencyInjection;
+global using BlockLab.Blazor.Partial;
