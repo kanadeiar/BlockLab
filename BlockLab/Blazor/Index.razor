@@ -28,7 +28,7 @@
                     var i = 1;
                     foreach (var r in Researches)
                     {
-                        <li class="list-group-item @(r.IsNormal?"":"bg-danger bg-opacity-25")">
+                        <li class="list-group-item my-item @(r.IsNormal?"":"bg-danger bg-opacity-25")">
                             <span>@(i++) Дата и время: <strong>@r.DateTime.ToString("dd.MM.yyyy HH:mm")</strong></span>
                             <span>Название: <strong>@r.Name</strong></span>
                             <span>Вид: <strong>@r.TypeResearch.Name</strong></span>
@@ -63,6 +63,9 @@
                         Обновить
                     </button>
                 </Tooltip>
+            </div>
+            <div>
+                <CounterPartial/>
             </div>
         </div>
     </div>
