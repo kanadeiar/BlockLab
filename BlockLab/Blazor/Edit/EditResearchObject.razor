@@ -1,5 +1,5 @@
-﻿@page "/edit/type"
-@page "/edit/type/{istrash:bool}"
+﻿@page "/edit/object"
+@page "/edit/object/{istrash:bool}"
 @inherits OwningComponentBase<BlockLabContext>
 
 <PageTitle>@Mode - Лаборатория</PageTitle>
@@ -15,39 +15,37 @@
             <div class="border-1 bg-light shadow rounded-1 p-2">
                 <h1 class="my-2 p-2">@Mode</h1>
 
-                <p>Все виды исследований:</p>
+                <p>Все объекты исследований:</p>
 
                 <div class="table-responsive">
                     <table class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Название</th>
-                                <th>Вид</th>
                                 <th>Количество исследований</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (TypeResearches is null)
+                            @if (ResearchObjects is null)
                             {
                                 <tr><th colspan="9" class="p-4 text-center">Загрузка ...</th></tr>
                             }
-                            else if (!TypeResearches.Any())
+                            else if (!ResearchObjects.Any())
                             {
                                 <tr><th colspan="9" class="p-4 text-center">Данные отсутствуют</th></tr>
                             }
                             else
                             {
-                                foreach (var e in TypeResearches)
+                                foreach (var e in ResearchObjects)
                                 {
                                     <tr>
                                         <td>@e.Name</td>
-                                        <td>@e.TypeResult.ToString()</td>
                                         <td>@e.Researches.Count() шт.</td>
                                         <td class="text-center">
                                             @if (!IsTrash)
                                             {
-                                                <NavLink class="btn btn-sm btn-info mb-1" href="@($"edit/type/edit/{e.Id}")">
+                                                <NavLink class="btn btn-sm btn-info mb-1" href="@($"edit/object/edit/{e.Id}")">
                                                     <i class="fas fa-edit"></i>
                                                     Редактировать
                                                 </NavLink>
@@ -80,11 +78,11 @@
                 <div class="my-1">
                     @if (!IsTrash)
                     {
-                        <NavLink class="btn btn-success mb-1" href="edit/type/create"> 
+                        <NavLink class="btn btn-success mb-1" href="edit/object/create"> 
                             <i class="fas fa-plus"></i>
                             Добавить
                         </NavLink>
-                        <NavLink class="btn btn-secondary mb-1" href="@($"edit/type/{true}")">
+                        <NavLink class="btn btn-secondary mb-1" href="@($"edit/object/{true}")">
                             <i class="fas fa-trash"></i>
                             Корзина
                         </NavLink>
@@ -95,7 +93,7 @@
                     }
                     else
                     {
-                        <NavLink class="btn btn-secondary mb-1" href="edit/type">
+                        <NavLink class="btn btn-secondary mb-1" href="edit/object">
                             <i class="fa fa-arrow-left"></i>
                             Назад
                         </NavLink>
@@ -114,9 +112,9 @@
     BlockLabContext _Context => Service;
     [Parameter]
     public bool IsTrash { get; set; }
-    private IQueryable<TypeResearch> _Query => _Context.TypeResearches
+    private IQueryable<ResearchObject> _Query => _Context.ResearchObjects
         .Include(x => x.Researches);
-    public IEnumerable<TypeResearch>? TypeResearches { get; set; }
+    public IEnumerable<ResearchObject>? ResearchObjects { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -124,31 +122,31 @@
     }
     private async Task UpdateData()
     {
-        TypeResearches = (!IsTrash) 
+        ResearchObjects = (!IsTrash) 
             ? await _Query.Where(p => !p.IsDelete).ToArrayAsync() 
             : await _Query.Where(p => p.IsDelete).ToArrayAsync();
     }
 
-    public async Task HandleTrash(TypeResearch r)
+    public async Task HandleTrash(ResearchObject r)
     {
         r.IsDelete = true;
         await _Context.SaveChangesAsync();
         await UpdateData();
     }
-    public async Task HandleUndoTrash(TypeResearch r)
+    public async Task HandleUndoTrash(ResearchObject r)
     {
         r.IsDelete = false;
         await _Context.SaveChangesAsync();
         await UpdateData();
     }
-    public async Task HandleDelete(TypeResearch r)
+    public async Task HandleDelete(ResearchObject r)
     {
         if (r.Researches.Any())
             return;
-        _Context.Remove<TypeResearch>(r);
+        _Context.Remove<ResearchObject>(r);
         await _Context.SaveChangesAsync();
         await UpdateData();
     }
 
-    public string Mode => IsTrash ? "Корзина удаленных видов исследовааний" : "Редактирование видов исследований";
+    public string Mode => IsTrash ? "Корзина удаленных объектов исследовааний" : "Редактирование объектов исследований";
 }
