@@ -1,7 +1,6 @@
-﻿@page "/edit/visual"
-@page "/edit/visual/{istrash:bool}"
+﻿@page "/edit/type"
+@page "/edit/type/{istrash:bool}"
 @inherits OwningComponentBase<BlockLabContext>
-@inject UserManager<User> userManager
 
 <PageTitle>@Mode - Лаборатория</PageTitle>
 
@@ -16,58 +15,39 @@
             <div class="border-1 bg-light shadow rounded-1 p-2">
                 <h1 class="my-2 p-2">@Mode</h1>
 
-                <p><strong>Вид исследования - визуальный осмотр</strong></p>
-
-                <p>Результаты визуальных осмотров за последние два месяца:</p>
+                <p>Все виды исследований:</p>
 
                 <div class="table-responsive">
                     <table class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Дата и время</th>
                                 <th>Название</th>
-                                <th>Объект исследования</th>
-                                <th>Результат</th>
-                                <th>Норма</th>
-                                <th>Лаборант</th>
-                                <th>Смена</th>
+                                <th>Вид</th>
+                                <th>Количество исследований</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Researches is null)
+                            @if (TypeResearches is null)
                             {
                                 <tr><th colspan="9" class="p-4 text-center">Загрузка ...</th></tr>
                             }
-                            else if (!Researches.Any())
+                            else if (!TypeResearches.Any())
                             {
                                 <tr><th colspan="9" class="p-4 text-center">Данные отсутствуют</th></tr>
                             }
                             else
                             {
-                                foreach (var e in Researches)
+                                foreach (var e in TypeResearches)
                                 {
                                     <tr>
-                                        <td>@e.DateTime.ToString("dd.MM.yyyy") @e.DateTime.ToString("HH:mm")</td>
                                         <td>@e.Name</td>
-                                        <td>@e.ResearchObject?.Name</td>
-                                        <td>@e.Text</td>
-                                        <td>
-                                            @if (@e.IsNormal)
-                                            {
-                                                <strong class="text-success">Норма</strong>
-                                            }
-                                            else
-                                            {
-                                                <strong class="text-danger">Плохо</strong>
-                                            }
-                                        </td>
-                                        <td><strong>@(userManager.FindByIdAsync(@e.UserId).Result.SurName)</strong></td>
-                                        <td>@e.WorkShift.Name</td>
+                                        <td>@e.TypeResult.ToString()</td>
+                                        <td>@e.Researches.Count() шт.</td>
                                         <td class="text-center">
                                             @if (!IsTrash)
                                             {
-                                                <NavLink class="btn btn-sm btn-info mb-1" href="@($"edit/visual/edit/{e.Id}")">
+                                                <NavLink class="btn btn-sm btn-info mb-1" href="@($"edit/type/edit/{e.Id}")">
                                                     <i class="fas fa-edit"></i>
                                                     Редактировать
                                                 </NavLink>
@@ -81,10 +61,13 @@
                                                     <i class="fas fa-undo"></i>
                                                     Вернуть из корзины
                                                 </button>
-                                                <button class="btn btn-sm btn-danger mb-1" @onclick="@( () => HandleDelete(e) )">
-                                                    <i class="fas fa-times"></i>
-                                                    Удалить совсем
-                                                </button>
+                                                @if (!e.Researches.Any())
+                                                {
+                                                    <button class="btn btn-sm btn-danger mb-1" @onclick="@( () => HandleDelete(e) )">
+                                                        <i class="fas fa-times"></i>
+                                                        Удалить совсем
+                                                    </button>
+                                                }
                                             }
                                         </td>
                                     </tr>
@@ -97,11 +80,11 @@
                 <div class="my-1">
                     @if (!IsTrash)
                     {
-                        <NavLink class="btn btn-success mb-1" href="edit/visual/create"> 
+                        <NavLink class="btn btn-success mb-1" href="edit/type/create"> 
                             <i class="fas fa-plus"></i>
                             Добавить
                         </NavLink>
-                        <NavLink class="btn btn-secondary mb-1" href="@($"edit/visual/{true}")">
+                        <NavLink class="btn btn-secondary mb-1" href="@($"edit/type/{true}")">
                             <i class="fas fa-trash"></i>
                             Корзина
                         </NavLink>
@@ -112,7 +95,7 @@
                     }
                     else
                     {
-                        <NavLink class="btn btn-secondary mb-1" href="edit/visual">
+                        <NavLink class="btn btn-secondary mb-1" href="edit/type">
                             <i class="fa fa-arrow-left"></i>
                             Назад
                         </NavLink>
@@ -131,13 +114,9 @@
     BlockLabContext _Context => Service;
     [Parameter]
     public bool IsTrash { get; set; }
-    private IQueryable<Research> _Query => _Context.Researches
-        .Include(q => q.ResearchObject)
-        .Include(q => q.WorkShift)
-        .Where(q => q.TypeResearch.Name == Names.VisualName && q.DateTime >= DateTime.Today.AddMonths(-1).AddDays(- DateTime.Today.Day))
-        .OrderByDescending(q => q.DateTime);
-
-    public IEnumerable<Research>? Researches { get; set; }
+    private IQueryable<TypeResearch> _Query => _Context.TypeResearches
+        .Include(x => x.Researches);
+    public IEnumerable<TypeResearch>? TypeResearches { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -145,29 +124,31 @@
     }
     private async Task UpdateData()
     {
-        Researches = (!IsTrash) 
+        TypeResearches = (!IsTrash) 
             ? await _Query.Where(p => !p.IsDelete).ToArrayAsync() 
             : await _Query.Where(p => p.IsDelete).ToArrayAsync();
     }
 
-    public async Task HandleTrash(Research r)
+    public async Task HandleTrash(TypeResearch r)
     {
         r.IsDelete = true;
         await _Context.SaveChangesAsync();
         await UpdateData();
     }
-    public async Task HandleUndoTrash(Research r)
+    public async Task HandleUndoTrash(TypeResearch r)
     {
         r.IsDelete = false;
         await _Context.SaveChangesAsync();
         await UpdateData();
     }
-    public async Task HandleDelete(Research r)
+    public async Task HandleDelete(TypeResearch r)
     {
-        _Context.Remove<Research>(r);
+        if (r.Researches.Any())
+            return;
+        _Context.Remove<TypeResearch>(r);
         await _Context.SaveChangesAsync();
         await UpdateData();
     }
 
-    public string Mode => IsTrash ? "Корзина удаленных результатов визуальных осмотров" : "Редактирование результатов визуальных осмотров";
+    public string Mode => IsTrash ? "Корзина удаленных видов исследовааний" : "Редактирование видов исследований";
 }
